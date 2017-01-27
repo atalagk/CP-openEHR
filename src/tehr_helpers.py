@@ -1,7 +1,7 @@
 import requests
 import pprint
 
-isLocal = True
+isLocal = True  #if false defaults to Ehrscape
 data = None
 
 if isLocal:
