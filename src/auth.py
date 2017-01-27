@@ -1,6 +1,6 @@
 import json
 
-isLocal = True
+isLocal = False
 
 with open('login.json') as login_details:
     login = json.load(login_details)
@@ -22,4 +22,5 @@ bioportal_url = login["bioportal"]["url"]
 api_key = login["bioportal"]["API_KEY"]
 
 if __name__ == "__main__":
+    print(baseUrl)
     print (username)
