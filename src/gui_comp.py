@@ -1,4 +1,4 @@
-import tehr_auth
+import auth
 import sys
 import requests
 import pprint
@@ -31,7 +31,7 @@ def showRow(field):
     layout.labelForField(field).show()
 
 def on_click():
-    url = tehr_auth.baseUrl + "/composition"
+    url = auth.baseUrl + "/composition"
     para = {}
     para['format'] = cmb_str.currentText()
     postData = txt_content.toPlainText()
@@ -67,9 +67,9 @@ def sendCompOperation(url, para, verb, data=None):
     header = {'Content-Type': 'application/json;charset=UTF-8'}
 
     if verb == "POST":
-        response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+        response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
     elif verb == "GET":
-        response = requests.get(url, params=para, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+        response = requests.get(url, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 if __name__ == '__main__':

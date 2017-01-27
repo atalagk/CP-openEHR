@@ -1,17 +1,9 @@
-import auth
-import requests
-import json
-import os
+import bioportal
 from pprint import pprint
 
-def get_json(url):
-    headers = {'Authorization': 'apikey token=' + auth.api_key}
-    r = requests.get(url, headers=headers)
-
-    return r.json()
 
 # Get the available resources
-resources = get_json(auth.url + "/")
+resources = bioportal.get_json("/")
 
 # Follow the ontologies link by looking for the media type in the list of links
 media_type = "http://data.bioontology.org/metadata/Ontology"
@@ -21,7 +13,7 @@ for link, link_type in resources["links"]["@context"].items():
         found_link = link
 
 # Get the ontologies from the link we found
-ontologies = get_json(resources["links"][found_link])
+ontologies = bioportal.get_json(resources["links"][found_link])
 
 # Get the name and ontology id from the returned list
 ontology_output = []

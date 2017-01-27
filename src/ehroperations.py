@@ -1,4 +1,4 @@
-import tehr_auth
+import auth
 import sys
 import requests
 
@@ -12,7 +12,7 @@ class EhrOperations(object):
         from requests.auth import HTTPBasicAuth
 
         if verb == "POST":
-            response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+            response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
         elif verb == "GET":
-            response = requests.get(url, params=para, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+            response = requests.get(url, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
         return response

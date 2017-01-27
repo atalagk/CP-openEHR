@@ -18,7 +18,7 @@ else:
     password = login["thinkehr"]["ehrscape-abi"]["password"]
 
 # Bioportal
-url = login["bioportal"]["url"]
+bioportal_url = login["bioportal"]["url"]
 api_key = login["bioportal"]["API_KEY"]
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import tehr_auth
+import auth
 import sys
 import requests
 from PySide.QtGui import *
@@ -56,7 +56,7 @@ win.setLayout(layout)
 win.show()
 
 def importCSV(data):
-    url = tehr_auth.baseUrl + "/import/csv"
+    url = auth.baseUrl + "/import/csv"
     para = {}
     para['templateId'] = txt_templateID.text()
     para['templateLanguage'] = txt_templateLang.text()
@@ -65,7 +65,7 @@ def importCSV(data):
 
     from requests.auth import HTTPBasicAuth
     header = {'Content-Type': 'application/octet-stream'}
-    response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+    response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 sys.exit(app.exec_())

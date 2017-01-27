@@ -1,17 +1,9 @@
-import auth
+import bioportal
 import requests
-import json
-import os
 from pprint import pprint
 
-def get_json(url):
-    headers = {'Authorization': 'apikey token=' + auth.api_key}
-    r = requests.get(url, headers=headers)
-
-    return r.json()
-
 # Get the available resources
-resources = get_json(auth.url + "/")
+resources = bioportal.get_json("/")
 
 # Get list of search terms
 search_terms = ['heart', 'lung', 'experiment', 'human', 'brain', 'melanoma']
@@ -22,7 +14,7 @@ for line in search_terms:
 # Do a search for every term
 search_results = []
 for term in terms:
-    search_results.append(get_json(auth.url + "/search?q=" + term)["collection"])
+    search_results.append(bioportal.get_json("/search?q=" + term)["collection"])
 
 # Print the results
 for result in search_results:

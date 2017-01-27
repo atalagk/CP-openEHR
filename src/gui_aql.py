@@ -1,4 +1,4 @@
-import tehr_auth
+import auth
 import sys
 import pprint
 import requests
@@ -54,9 +54,9 @@ win.setLayout(layout)
 win.show()
 
 def getAQL(aql):
-    url = tehr_auth.baseUrl + "/query/"
+    url = auth.baseUrl + "/query/"
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, params={'aql': aql}, auth=HTTPBasicAuth(tehr_auth.username, tehr_auth.password))
+    response = requests.get(url, params={'aql': aql}, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 sys.exit(app.exec_())
