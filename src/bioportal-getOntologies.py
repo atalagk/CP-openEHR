@@ -1,19 +1,17 @@
+import auth
 import requests
 import json
 import os
 from pprint import pprint
 
-url = "http://data.bioontology.org"
-API_KEY = "fe19a078-5d1a-4b1d-8f91-8319260dc552"
-
 def get_json(url):
-    headers = {'Authorization': 'apikey token=' + API_KEY}
+    headers = {'Authorization': 'apikey token=' + auth.api_key}
     r = requests.get(url, headers=headers)
 
     return r.json()
 
 # Get the available resources
-resources = get_json(url + "/")
+resources = get_json(auth.url + "/")
 
 # Follow the ontologies link by looking for the media type in the list of links
 media_type = "http://data.bioontology.org/metadata/Ontology"

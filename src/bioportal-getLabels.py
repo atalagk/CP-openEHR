@@ -1,19 +1,17 @@
+import auth
 import requests
 import json
 import os
 from pprint import pprint
 
-url = "http://data.bioontology.org"
-API_KEY = "fe19a078-5d1a-4b1d-8f91-8319260dc552"
-
 def get_json(url):
-    headers = {'Authorization': 'apikey token=' + API_KEY}
+    headers = {'Authorization': 'apikey token=' + auth.api_key}
     r = requests.get(url, headers=headers)
 
     return r.json()
 
 # Get all ontologies from the REST service and parse the JSON
-ontologies = get_json(url + "/ontologies")
+ontologies = get_json(auth.url + "/ontologies")
 
 # Iterate looking for ontology with acronym BRO
 bro = None
