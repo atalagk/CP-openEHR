@@ -1,46 +1,35 @@
+import auth
 import requests
 import pprint
 
-isLocal = True  #if false defaults to Ehrscape
 data = None
 
-if isLocal:
-    baseUrl = 'http://130.216.208.42:8081/rest/v1'
-    ehrId = 'd7725334-4e54-4cb1-81d7-501891449bbc'  #Local
-    username = "koray"
-    password = "123456"
-else:
-    baseUrl = 'https://rest.ehrscape.com/rest/v1'
-    ehrId = '6f81d77a-26ef-4cf4-926f-40ccfafd8a1f'  #Ehrscape
-    username = "k.atalag@auckland.ac.nz"   #"guidemo"
-    password = "ehr4k.atalag"     #"gui?!demo123"
-
 def getEhr():
-    url = baseUrl + '/ehr/' + ehrId
+    url = auth.baseUrl + '/ehr/' + auth.ehrId
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 def getView():
-    url = baseUrl + "/view/" + ehrId + "/body_temperature"
+    url = auth.baseUrl + "/view/" + auth.ehrId + "/body_temperature"
     #url = baseUrl + "/view/" + ehrId + "/blood_pressure"
     #url = baseUrl + "/view/" + ehrId + "/pulse"
     #data = {'from':'2014-3-1'}
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, data, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url, data, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 def getComp():
-    url = baseUrl + "/composition/" + 'e9f628af-6721-4ea1-8e1f-5225c1aa2beb::default::1'    #"ehrId": "99aaaac3-9fbd-4dca-a130-20355c50df12" (148-152, step 4, break 10)
+    url = auth.baseUrl + "/composition/" + 'e9f628af-6721-4ea1-8e1f-5225c1aa2beb::default::1'    #"ehrId": "99aaaac3-9fbd-4dca-a130-20355c50df12" (148-152, step 4, break 10)
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 def getForms(**kwargs):
     formName = kwargs.get('formName', None)
     formVersion = kwargs.get('formVersion', None)
     formResources = kwargs.get('formResources', None)
-    url = baseUrl + "/form/"
+    url = auth.baseUrl + "/form/"
     if formName:
         url += formName
     if formVersion:
@@ -48,7 +37,7 @@ def getForms(**kwargs):
     if formResources:
         formResources = {'resources': formResources}
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, params=formResources, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url, params=formResources, auth=HTTPBasicAuth(auth.username, auth.password))
     print(response.url)
     return response
 
@@ -56,13 +45,13 @@ def getWebTemplate(**kwargs):
     #http://130.216.208.42:8081/rest/v1/template/DogAPTrace-annot
     templateName = kwargs.get('templateName', None)
     templatePath = kwargs.get('templatePath', None)
-    url = baseUrl + "/template/"
+    url = auth.baseUrl + "/template/"
     if templateName:
         url += templateName
     if templatePath:
         url += '/' + templatePath
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, params=templatePath, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url, params=templatePath, auth=HTTPBasicAuth(auth.username, auth.password))
     #print(response.url)
     return response
 

@@ -1,4 +1,4 @@
-import ka1
+import tehr_helpers
 
 def unpack_annotations():
     #aql = binds[::2]
@@ -69,11 +69,11 @@ def get_recursively(search_dict, field):
     return aql_path + fields_found
 
 def searchTemplate (t):
-    tBinds = get_recursively(t.json(), 'termBindings')
-    print(tBinds)
+    tbinds = get_recursively(t.json(), 'termBindings')
+    print(tbinds)
     quit()
 
-    tBinds = item_generator(t.json(), 'termBindings')
+    tbinds = item_generator(t.json(), 'termBindings')
 
     for t, a in tBinds:
         x = next(a, 'No AQL')
@@ -82,9 +82,6 @@ def searchTemplate (t):
     print('End of first pass')
 
 
-
-
-wt = ka1.getWebTemplate(templateName='KorayClinical4')
-#annot1 =
+wt = tehr_helpers.getWebTemplate(templateName='KorayClinical4')
 
 searchTemplate(wt)

@@ -1,6 +1,6 @@
 import json
 
-isLocal = False
+isLocal = True
 
 with open('login.json') as login_details:
     login = json.load(login_details)
