@@ -69,13 +69,13 @@ def get_recursively(search_dict, field):
     return aql_path + fields_found
 
 def searchTemplate (t):
-    tbinds = get_recursively(t.json(), 'termBindings')
-    print(tbinds)
-    quit()
+    #tbinds = get_recursively(t.json(), 'termBindings')
+    #print(tbinds)
+    #quit()
 
     tbinds = item_generator(t.json(), 'termBindings')
 
-    for t, a in tBinds:
+    for t, a in tbinds:
         x = next(a, 'No AQL')
         if x != 'No AQL':
             print(t, x[0])
