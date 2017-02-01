@@ -1,4 +1,6 @@
 import tehr_helpers
+import json
+import pprint
 
 def unpack_annotations():
     #aql = binds[::2]
@@ -45,14 +47,12 @@ def item_generator(json_input, lookup_key):     #gets all termBindings but not a
 
 def get_recursively(search_dict, field):
     fields_found = []
-    aql_path = []
-
+    aql_path = ""
     for key, value in search_dict.items():
-
         if key == field:
             fields_found.append(value)
             if search_dict['aqlPath'] != "":
-                aql_path.append(search_dict['aqlPath'])
+                aql_path = search_dict['aqlPath']
 
         elif isinstance(value, dict):
             results = get_recursively(value, field)
@@ -66,14 +66,14 @@ def get_recursively(search_dict, field):
                     for another_result in more_results:
                         fields_found.append(another_result)
 
-    return aql_path + fields_found
+    return fields_found, aql_path
 
 def searchTemplate (t):
-    #tbinds = get_recursively(t.json(), 'termBindings')
-    #print(tbinds)
-    #quit()
+    tbinds, aql = get_recursively(t, 'termBindings')
+    pprint.pprint(tbinds, aql)
+    quit()
 
-    tbinds = item_generator(t.json(), 'termBindings')
+    #tbinds = item_generator(t, 'termBindings')
 
     for t, a in tbinds:
         x = next(a, 'No AQL')
@@ -81,7 +81,10 @@ def searchTemplate (t):
             print(t, x[0])
     print('End of first pass')
 
+#wt = tehr_helpers.getWebTemplate(templateName='KorayClinical4')
+with open('..\\models\KorayClinical4-webtemplate.json') as webTemplateFile:
+    wt = json.load(webTemplateFile)
 
-wt = tehr_helpers.getWebTemplate(templateName='KorayClinical4')
 
+#aql_path = []
 searchTemplate(wt)
