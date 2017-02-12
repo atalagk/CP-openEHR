@@ -3,7 +3,7 @@ import json
 import pprint
 
 preAql = None
-def unpack_std_annotations(term, aql):
+def unpackStdAnnotations(term, aql):
 
     for d in term.values():
         tId = d['terminologyId']
@@ -46,7 +46,7 @@ def getStdTermBindings (wt):
     tbinds = item_generator(wt, 'termBindings', 'aqlPath')
 
     for t, a in tbinds:
-        unpack_std_annotations(t, a)
+        unpackStdAnnotations(t, a)
 
 def getCustomTermBindings (wt):
 
@@ -54,13 +54,33 @@ def getCustomTermBindings (wt):
     for t, l in custom_tbinds:
         print()
         print('Custom terminologyId = ' + t)
-        #unpack_custom_annotations(l)
         for item in l:
             print('code = ' + item['value'])
+
+
+def getCustomTermBindingswAql(wt):
+
+    custom_tbinds = item_generator(wt, 'aqlPath', 'inputs')
+    for a, i in custom_tbinds:
+        if isinstance(i, list):
+            for item in i:
+                try:
+                    if item['suffix'] == 'code' and item['type'] == 'CODED_TEXT':
+                        if item['terminology'] is not None:
+                            for moreitem in item['list']:
+                                print()
+                                print('Valuelist')
+                                print(a)
+                                print('custom terminologyId = ' + item['terminology'])
+                                print('code = ' + moreitem['value'])
+                except:
+                    pass
+
 
 #wt = tehr_helpers.getWebTemplate(templateName='KorayClinical4')
 with open('..\\models\KorayClinical4-webtemplate.json') as webTemplateFile:
     wt = json.load(webTemplateFile)
 
 getStdTermBindings(wt)
-getCustomTermBindings(wt)
+#getCustomTermBindings(wt)
+getCustomTermBindingswAql(wt)
