@@ -48,17 +48,7 @@ def getStdTermBindings (wt):
     for t, a in tbinds:
         unpackStdAnnotations(t, a)
 
-def getCustomTermBindings (wt):
-
-    custom_tbinds = item_generator(wt, 'terminology', 'list')
-    for t, l in custom_tbinds:
-        print()
-        print('Custom terminologyId = ' + t)
-        for item in l:
-            print('code = ' + item['value'])
-
-
-def getCustomTermBindingswAql(wt):
+def getCustomTermBindings(wt):
 
     custom_tbinds = item_generator(wt, 'aqlPath', 'inputs')
     for a, i in custom_tbinds:
@@ -82,5 +72,4 @@ with open('..\\models\KorayClinical4-webtemplate.json') as webTemplateFile:
     wt = json.load(webTemplateFile)
 
 getStdTermBindings(wt)
-#getCustomTermBindings(wt)
-getCustomTermBindingswAql(wt)
+getCustomTermBindings(wt)
