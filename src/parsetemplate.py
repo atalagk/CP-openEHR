@@ -1,29 +1,31 @@
 import tehr_helpers
 import json
 import pprint
+import collections
 
 preAql = None
-def unpackStdAnnotations(term, aql):
 
+
+def unpackStdAnnotations(term, aql):
+    tbs = collections.OrderedDict()
     for d in term.values():
         tId = d['terminologyId']
         tVal = d['value']
 
-        print()
         global preAql
         if aql == 'N/A':
-            print("Valuelist")
-            print('path = ' + preAql)
+            tbs['type'] = "Valuelist from Archetype"
+            tbs['path'] = preAql
         else:
-            print('Archetype path')
-            print('path = ' + aql)
-            preAql = aql
+            tbs['type'] = 'Archetype path'
+            tbs['path'] = aql
 
-        print('terminologyId = ' + tId)
-        print('code = ' + tVal)
+        tbs['terminologyId'] = tId
+        tbs['code'] = tVal
+    return tbs
 
 
-#Generator parser
+# Generator parser
 def item_generator(json_input, lookup_term, key):
     if isinstance(json_input, dict):
         for k, v in json_input.items():
@@ -41,16 +43,21 @@ def item_generator(json_input, lookup_term, key):
             for item_val in item_generator(item, lookup_term, key):
                 yield item_val
 
-def getStdTermBindings (wt):
 
+def getStdTermBindings (wt):
+    ls = []
     tbinds = item_generator(wt, 'termBindings', 'aqlPath')
 
     for t, a in tbinds:
-        unpackStdAnnotations(t, a)
+        ls.append(unpackStdAnnotations(t, a))
+    return ls
+
 
 def getCustomTermBindings(wt):
 
     custom_tbinds = item_generator(wt, 'aqlPath', 'inputs')
+    tbs = collections.OrderedDict()
+    ls = []
     for a, i in custom_tbinds:
         if isinstance(i, list):
             for item in i:
@@ -58,18 +65,35 @@ def getCustomTermBindings(wt):
                     if item['suffix'] == 'code' and item['type'] == 'CODED_TEXT':
                         if item['terminology'] is not None and item['terminology'] != 'openehr':
                             for moreitem in item['list']:
-                                print()
-                                print('Valuelist')
-                                print(a)
-                                print('custom terminologyId = ' + item['terminology'])
-                                print('code = ' + moreitem['value'])
+                                tbs['type'] = 'Valuelist from Template'
+                                tbs['path'] = a
+                                tbs['terminologyId'] = item['terminology']
+                                tbs['code'] = moreitem['value']
+                                ls.append(tbs)
                 except:
                     pass
+    return ls
 
 
-#wt = tehr_helpers.getWebTemplate(templateName='KorayClinical4')
-with open('..\\models\KorayClinical4-webtemplate.json') as webTemplateFile:
-    wt = json.load(webTemplateFile)
+def getTermBindings(**kwargs):
 
-getStdTermBindings(wt)
-getCustomTermBindings(wt)
+    templateName = kwargs.get('templateName', None)
+    templateFile = kwargs.get('templateFile', None)
+
+    if templateName:
+        wt = tehr_helpers.getWebTemplate(templateName=templateName).json()
+    if templateFile:
+        with open(templateFile) as webTemplateFile:
+            wt = json.load(webTemplateFile)
+
+    tbs = {}
+    l1 = getStdTermBindings(wt)
+    l2 = getCustomTermBindings(wt)
+    tbs = json.dumps(l1 + l2, indent=2)
+    return tbs
+
+
+if __name__ == "__main__":
+    # tb = getTermBindings(templateName='DogAPTrace3')
+    tb = getTermBindings(templateFile='..\\models\KorayClinical4-webtemplate.json')
+    print(tb)

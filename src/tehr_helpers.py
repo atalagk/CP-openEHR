@@ -42,29 +42,29 @@ def getForms(**kwargs):
     return response
 
 def getWebTemplate(**kwargs):
-    #http://130.216.208.42:8081/rest/v1/template/DogAPTrace-annot
+    # usage: only TemplateName gets whole wt; TemplateName & TemplatePath {key, value} gets wt at path
     templateName = kwargs.get('templateName', None)
     templatePath = kwargs.get('templatePath', None)
     url = auth.baseUrl + "/template/"
     if templateName:
         url += templateName
     if templatePath:
-        url += '/' + templatePath
+        url += '/path/'
     from requests.auth import HTTPBasicAuth
     response = requests.get(url, params=templatePath, auth=HTTPBasicAuth(auth.username, auth.password))
-    #print(response.url)
     return response
 
 
 if __name__ == "__main__":
     #r = getWebTemplate(templateName='DogAPTrace-annot')
+    #r = getWebTemplate(templateName='KorayClinical4', templatePath={'aqlPath': 'content[openEHR-EHR-OBSERVATION.blood_pressure.v1]/data[at0001]/events[at0006]/state[at0007]/'})
     #r = getComp().json()
     #r = getEhr().json()
     #r = getView().json()
     #r = getForms().json()
     #r = getForms(formName='ABI1', formVersion='1.0.0', formResources='ALL').json()
 
-    #print(r)
+    #pprint.pprint(r.json())
 
     #for items in r['composition']:
         #print(items)
