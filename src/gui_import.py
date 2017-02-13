@@ -1,8 +1,7 @@
 import auth
 import sys
 import requests
-from PySide.QtGui import *
-from PySide.QtCore import *
+from PyQt5.QtWidgets import *
 
 app = QApplication(sys.argv)
 win = QWidget()

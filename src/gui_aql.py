@@ -2,8 +2,9 @@ import auth
 import sys
 import pprint
 import requests
-from PySide.QtGui import *
-from PySide.QtCore import *
+from PyQt5.QtWidgets import *
+#from PySide.QtGui import *
+#from PySide.QtCore import *
 
 default_aql = 'select e/ehr_id/value from EHR e limit 10'
 
@@ -15,7 +16,7 @@ win.setWindowTitle("Enter AQL")
 
 btn_query = QPushButton("Run AQL", win)
 
-@Slot()
+#@Slot()
 def on_click():
     aql_final = txt_aql.toPlainText()
     #aql_final = aql_final.replace('\n', ' ').replace('\r', '')

@@ -3,7 +3,7 @@ import sys
 import requests
 import pprint
 import json
-from PySide.QtGui import *
+from PyQt5.QtWidgets import *
 
 def txt_content_dblClick(event):
     txt_content.clear()

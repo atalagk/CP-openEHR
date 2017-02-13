@@ -2,8 +2,7 @@
 # it receives the command line arguments passed to the script, as they
 # can be used to customize the application's appearance and behavior
 import sys
-from PySide.QtCore import *
-from PySide.QtGui import *
+from PyQt5.QtWidgets import *
 
 qt_app = QApplication(sys.argv)
 
@@ -146,7 +145,7 @@ class LayoutExample(QWidget):
         # Create the build button with its caption
         self.build_button = QPushButton('Build Greeting', self)
 
-        @Slot()
+        #@Slot()
         def on_click():
             ''' Tell when the button is clicked. '''
             msg = self.salutation.currentText() + " " + self.recipient.text()

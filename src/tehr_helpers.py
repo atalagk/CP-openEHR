@@ -54,6 +54,12 @@ def getWebTemplate(**kwargs):
     response = requests.get(url, params=templatePath, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
+def saveWebTemplate(templateName):
+    import json
+    wt = getWebTemplate(templateName=templateName).json()
+    f = open(templateName + '.json', 'w')
+    #f.write(wt)
+    json.dump(wt, f)
 
 if __name__ == "__main__":
     #r = getWebTemplate(templateName='DogAPTrace-annot')
@@ -73,6 +79,9 @@ if __name__ == "__main__":
         #print(r['composition'])
         #print('temp:' + str(items['temperature']))
 
+    # saveWebTemplate('ANZACS-ACS')
+
+    #quit()
     r = getEhr().json()
     print(r['ehrId'])
     for k, v in r['ehrStatus'].items():

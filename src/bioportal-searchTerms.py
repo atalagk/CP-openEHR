@@ -2,14 +2,19 @@ import bioportal
 import requests
 from pprint import pprint
 
-include = "&ontologies=SNOMEDCT&include=prefLabel&display_context=false&display_links=false"
+include = "&ontologies=SNOMEDCT&display_context=false"
+#include += "&cui=C0018799"
+include += "&include=prefLabel,cui"
+#include += "&suggest=true"
+include += "&require_exact_match=true"
+#include += "&display_links=false"
 
 # Get the available resources
 resources = bioportal.get_json("/")
 
 
 # Get list of search terms
-search_terms = ['arteriosclerosis', 'thumb']     #, 'gastritis', 'experiment', 'human', 'brain', 'melanoma']
+search_terms = ['Acute coronary syndrome']     #, 'gastritis', 'experiment', 'human', 'brain', 'melanoma']
 terms = []
 for line in search_terms:
     terms.append(line)
