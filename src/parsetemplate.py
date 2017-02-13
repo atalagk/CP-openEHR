@@ -89,11 +89,27 @@ def getTermBindings(**kwargs):
     tbs = {}
     l1 = getStdTermBindings(wt)
     l2 = getCustomTermBindings(wt)
-    tbs = json.dumps(l1 + l2, indent=2)
-    return tbs
+    tbs = l1 + l2
+
+    # need to call with either TemplateName or TemplateFile BUT not both!
+    if templateName and not templateFile:
+        tinfo = {'Template name' : templateName}
+    if templateFile and not templateName:
+        tinfo = {'Template file': templateFile}
+    tbdict = {'Terminology bindings':tbs}
+    tbinds = {**tinfo, **tbdict}  # works Python >3.5
+    return tbinds
 
 
 if __name__ == "__main__":
-    # tb = getTermBindings(templateName='DogAPTrace3')
-    tb = getTermBindings(templateFile='..\\models\KorayClinical4-webtemplate.json')
-    print(tb)
+    templateName = ''
+    templateFile = ''
+    templateName = 'KorayClinical4'
+    #templateFile = '..\\models\KorayClinical4-webtemplate.json'
+    tb = None
+    if templateName and not templateFile:
+        tb = getTermBindings(templateName=templateName)
+    if templateFile and not templateName:
+        tb = getTermBindings(templateFile=templateFile)
+
+    print(json.dumps(tb, indent=2))
