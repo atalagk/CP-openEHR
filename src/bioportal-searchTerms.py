@@ -2,12 +2,14 @@ import bioportal
 import requests
 from pprint import pprint
 
-include = "&ontologies=SNOMEDCT&display_context=false"
+include = ''
+include = "&ontologies=SNOMEDCT"
+include += "&display_context=false"
 #include += "&cui=C0018799"
 include += "&include=prefLabel,cui"
 #include += "&suggest=true"
 include += "&require_exact_match=true"
-#include += "&display_links=false"
+include += "&display_links=false"
 
 # Get the available resources
 resources = bioportal.get_json("/")

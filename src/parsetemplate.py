@@ -104,8 +104,8 @@ def getTermBindings(**kwargs):
 if __name__ == "__main__":
     templateName = ''
     templateFile = ''
-    #templateName = 'ANZACS-ACS'
-    templateFile = '..\\models\ANZACS-ACS.webtemplate.json'
+    templateName = 'KorayClinical4'
+    #templateFile = '..\\models\ANZACS-ACS.webtemplate.json'
     tb = None
     if templateName and not templateFile:
         tb = getTermBindings(templateName=templateName)
