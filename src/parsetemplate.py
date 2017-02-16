@@ -6,8 +6,9 @@ import collections
 preAql = None
 
 
-def unpackStdAnnotations(term, aql):
+def unpackStdAnnotations(term, aql, nodeId):
     tbs = collections.OrderedDict()
+    ls = []
     for d in term.values():
         tId = d['terminologyId']
         tVal = d['value']
@@ -19,10 +20,17 @@ def unpackStdAnnotations(term, aql):
         else:
             tbs['type'] = 'Archetype path'
             tbs['path'] = aql
+            preAql = aql
 
+        tbs['nodeId'] = nodeId
         tbs['terminologyId'] = tId
         tbs['code'] = tVal
-    return tbs
+        if len(term)>1:
+            ls.append(tbs.copy())
+    if len(term) > 1:
+        return ls
+    else:
+        return tbs
 
 
 # Generator parser
@@ -34,7 +42,11 @@ def item_generator(json_input, lookup_term, key):
                     aq = json_input[key]
                 except:
                     aq = 'N/A'
-                yield v, aq
+                try:
+                    nodeId = json_input['nodeId']
+                except:
+                    nodeId = 'N/A'
+                yield v, aq, nodeId
             else:
                 for child_val in item_generator(v, lookup_term, key):
                     yield child_val
@@ -48,25 +60,27 @@ def getStdTermBindings (wt):
     ls = []
     tbinds = item_generator(wt, 'termBindings', 'aqlPath')
 
-    for t, a in tbinds:
-        ls.append(unpackStdAnnotations(t, a))
+    for t, a, n in tbinds:
+        ls.append(unpackStdAnnotations(t, a, n))
     return ls
 
 
 def getCustomTermBindings(wt):
 
     custom_tbinds = item_generator(wt, 'aqlPath', 'inputs')
-    tbs = collections.OrderedDict()
+
     ls = []
-    for a, i in custom_tbinds:
+    for a, i, n in custom_tbinds:
         if isinstance(i, list):
             for item in i:
                 try:
                     if item['suffix'] == 'code' and item['type'] == 'CODED_TEXT':
                         if item['terminology'] is not None and item['terminology'] != 'openehr':
                             for moreitem in item['list']:
+                                tbs = collections.OrderedDict()
                                 tbs['type'] = 'Valuelist from Template'
                                 tbs['path'] = a
+                                tbs['nodeId'] = n
                                 tbs['terminologyId'] = item['terminology']
                                 tbs['code'] = moreitem['value']
                                 ls.append(tbs)
@@ -93,10 +107,10 @@ def getTermBindings(**kwargs):
 
     # need to call with either TemplateName or TemplateFile BUT not both!
     if templateName and not templateFile:
-        tinfo = {'Template name' : templateName}
+        tinfo = {'Template name': templateName}
     if templateFile and not templateName:
         tinfo = {'Template file': templateFile}
-    tbdict = {'Terminology bindings':tbs}
+    tbdict = {'Terminology bindings': tbs}
     tbinds = {**tinfo, **tbdict}  # works Python >3.5
     return tbinds
 
@@ -104,8 +118,10 @@ def getTermBindings(**kwargs):
 if __name__ == "__main__":
     templateName = ''
     templateFile = ''
+
     templateName = 'KorayClinical4'
     #templateFile = '..\\models\ANZACS-ACS.webtemplate.json'
+
     tb = None
     if templateName and not templateFile:
         tb = getTermBindings(templateName=templateName)

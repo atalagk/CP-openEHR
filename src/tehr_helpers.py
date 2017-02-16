@@ -79,9 +79,9 @@ if __name__ == "__main__":
         #print(r['composition'])
         #print('temp:' + str(items['temperature']))
 
-    # saveWebTemplate('ANZACS-ACS')
-
+    #saveWebTemplate('ANZACS-ACS')
     #quit()
+
     r = getEhr().json()
     print(r['ehrId'])
     for k, v in r['ehrStatus'].items():
