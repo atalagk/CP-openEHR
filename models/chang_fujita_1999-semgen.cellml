@@ -1,0 +1,2524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="chang_1999" cmeta:id="chang_1999">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>A kinetic model of the thiazide-sensitive Na-Cl cotransporter</title>
+        <author>
+          <firstname>Catherine</firstname>
+          <surname>Lloyd</surname>
+          <affiliation>
+            <shortaffil>Auckland Bioengineering Institute, The University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>This CellML model runs in OpenCell and COR.  The units have ben checked and they are consistent.  We are unsure whether or not the model recreates the published results as there are no simple figures of changing concentration against time.  Also sodium and chloride are set to constant values in this model - we suspect we need to derive an ODE equation based on the reaction figure (fig 1) in the paper.</para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>ABSTRACT: The aim of this study was to construct a numerical model of the thiazide-sensitive Na-Cl cotransporter (TSC) that can predict kinetics of thiazide binding and substrate transport of TSC. We hypothesized that the mechanisms underlying these kinetic properties can be approximated by a state diagram in which the transporter has two binding sites, one for sodium and another for chloride and thiazide. On the basis of the state diagram, a system of linear equations that should be satisfied in the steady state was postulated. Numerical solution of these equations yielded model prediction of kinetics of thiazide binding and substrate transport. Rate constants, which determine transitional rates between states, were systematically adjusted to minimize a penalty function that was devised to quantitatively estimate the difference between model predictions and experimental results. With the resultant rate constants, the model could simulate the following experimental results: 1) dissociation constant of thiazide in the absence of sodium and chloride; 2) inhibitory effect of chloride on thiazide binding; 3) stimulatory effect of sodium on thiazide binding; 4) combined effects of sodium and chloride on thiazide binding; 5) dependence of sodium influx on extracellular sodium and chloride; and 6) inhibition of sodium influx by extracellular thiazide. We conclude that known kinetic properties of TSC can be predicted by a model which is based on a state diagram.</para>
+        <para>The original paper reference is cited below:</para>
+        <para>
+          A kinetic model of the thiazide-sensitive Na-Cl cotransporter, Hangil Chang and Toshiro Fujita, 1999,
+          <emphasis>American Journal of Physiology</emphasis>
+          , 276, F952-F959.
+          <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/10362783">PubMed ID: 10362783</ulink>
+        </para>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>diagram of the model</title>
+              </objectinfo>
+              <imagedata fileref="chang_1999.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>
+            State diagram for the thiazide-sensitive Na-Cl cotransporter (TSC).  Transporter (E) has binding sites for sodium (Na ) and chloride (Cl).  Thiazide diuretics (D) compete with chloride for the same binding site.
+            <emphasis>_i</emphasis>
+            is used to indicate which symbols belong to the intracellular side.
+          </caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="millimolar">
+    <unit prefix="milli" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="first_order_rate_constant">
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="second_order_rate_constant">
+    <unit exponent="-1.0" units="millimolar" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <component name="environment">
+    <variable name="time" public_interface="out" units="second" />
+  </component>
+  <component name="E" cmeta:id="E">
+    <variable initial_value="0.08333" name="E" public_interface="out" units="millimolar" />
+    <variable name="k23" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k24" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k17" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k18" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k1" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k2" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k3" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k4" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ED" public_interface="in" units="millimolar" />
+    <variable name="E_" public_interface="in" units="millimolar" />
+    <variable name="ENa" public_interface="in" units="millimolar" />
+    <variable name="ECl" public_interface="in" units="millimolar" />
+    <variable name="D" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="Cl" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>E</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k24</ci>
+              <ci>ED</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k18</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k2</ci>
+              <ci>ENa</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k4</ci>
+              <ci>ECl</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k23</ci>
+              <ci>D</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k17</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k1</ci>
+              <ci>Na</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k3</ci>
+              <ci>Cl</ci>
+              <ci>E</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="E_" cmeta:id="E_">
+    <variable initial_value="0.08333" name="E_" public_interface="out" units="millimolar" />
+    <variable name="k29" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k30" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k17" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k18" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k11" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k12" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k9" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k10" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ED_" public_interface="in" units="millimolar" />
+    <variable name="E" public_interface="in" units="millimolar" />
+    <variable name="ENa_" public_interface="in" units="millimolar" />
+    <variable name="ECl_" public_interface="in" units="millimolar" />
+    <variable name="D_" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="Cl_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>E_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k30</ci>
+              <ci>ED_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k17</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k10</ci>
+              <ci>ENa_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k12</ci>
+              <ci>ECl_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k29</ci>
+              <ci>D_</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k18</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k9</ci>
+              <ci>Na_</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k11</ci>
+              <ci>Cl_</ci>
+              <ci>E_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ED" cmeta:id="ED">
+    <variable initial_value="0.08333" name="ED" public_interface="out" units="millimolar" />
+    <variable name="k23" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k24" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k21" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k22" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E" public_interface="in" units="millimolar" />
+    <variable name="ENaD" public_interface="in" units="millimolar" />
+    <variable name="D" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ED</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k23</ci>
+              <ci>E</ci>
+              <ci>D</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k22</ci>
+              <ci>ENaD</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k24</ci>
+              <ci>ED</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k21</ci>
+              <ci>Na</ci>
+              <ci>ED</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ED_" cmeta:id="ED_">
+    <variable initial_value="0.08333" name="ED_" public_interface="out" units="millimolar" />
+    <variable name="k29" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k30" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k27" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k28" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E_" public_interface="in" units="millimolar" />
+    <variable name="ENaD_" public_interface="in" units="millimolar" />
+    <variable name="D_" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ED_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k29</ci>
+              <ci>E_</ci>
+              <ci>D_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k28</ci>
+              <ci>ENaD_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k30</ci>
+              <ci>ED_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k27</ci>
+              <ci>Na_</ci>
+              <ci>ED_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENaD" cmeta:id="ENaD">
+    <variable initial_value="0.08333" name="ENaD" public_interface="out" units="millimolar" />
+    <variable name="k25" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k26" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k21" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k22" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ED" public_interface="in" units="millimolar" />
+    <variable name="ENa" public_interface="in" units="millimolar" />
+    <variable name="D" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENaD</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k21</ci>
+              <ci>Na</ci>
+              <ci>ED</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k25</ci>
+              <ci>D</ci>
+              <ci>ENa</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k22</ci>
+              <ci>ENaD</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k26</ci>
+              <ci>ENaD</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENaD_" cmeta:id="ENaD_">
+    <variable initial_value="0.08333" name="ENaD_" public_interface="out" units="millimolar" />
+    <variable name="k27" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k28" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k31" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k32" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ED_" public_interface="in" units="millimolar" />
+    <variable name="ENa_" public_interface="in" units="millimolar" />
+    <variable name="D_" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENaD_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k27</ci>
+              <ci>Na_</ci>
+              <ci>ED_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k31</ci>
+              <ci>D_</ci>
+              <ci>ENa_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k28</ci>
+              <ci>ENaD_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k32</ci>
+              <ci>ENaD_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENa" cmeta:id="ENa">
+    <variable initial_value="0.08333" name="ENa" public_interface="out" units="millimolar" />
+    <variable name="k25" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k26" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k1" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k2" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k5" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k6" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E" public_interface="in" units="millimolar" />
+    <variable name="ENaCl" public_interface="in" units="millimolar" />
+    <variable name="ENaD" public_interface="in" units="millimolar" />
+    <variable name="D" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="Cl" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENa</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k1</ci>
+              <ci>Na</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k26</ci>
+              <ci>ENaD</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k6</ci>
+              <ci>ENaCl</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k2</ci>
+              <ci>ENa</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k5</ci>
+              <ci>Cl</ci>
+              <ci>ENa</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k25</ci>
+              <ci>D</ci>
+              <ci>ENa</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENa_" cmeta:id="ENa_">
+    <variable initial_value="0.08333" name="ENa_" public_interface="out" units="millimolar" />
+    <variable name="k31" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k32" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k9" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k10" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k13" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k14" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E_" public_interface="in" units="millimolar" />
+    <variable name="ENaCl_" public_interface="in" units="millimolar" />
+    <variable name="ENaD_" public_interface="in" units="millimolar" />
+    <variable name="D_" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="Cl_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENa_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k9</ci>
+              <ci>Na_</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k32</ci>
+              <ci>ENaD_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k14</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k10</ci>
+              <ci>ENa_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k13</ci>
+              <ci>Cl_</ci>
+              <ci>ENa_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k31</ci>
+              <ci>D_</ci>
+              <ci>ENa_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ECl" cmeta:id="ECl">
+    <variable initial_value="0.08333" name="ECl" public_interface="out" units="millimolar" />
+    <variable name="k7" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k8" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k3" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k4" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E" public_interface="in" units="millimolar" />
+    <variable name="ENaCl" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="Cl" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ECl</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k3</ci>
+              <ci>Cl</ci>
+              <ci>E</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k8</ci>
+              <ci>ENaCl</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k7</ci>
+              <ci>Na</ci>
+              <ci>ECl</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k4</ci>
+              <ci>ECl</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ECl_" cmeta:id="ECl_">
+    <variable initial_value="0.08333" name="ECl_" public_interface="out" units="millimolar" />
+    <variable name="k11" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k12" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k15" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k16" public_interface="in" units="first_order_rate_constant" />
+    <variable name="E_" public_interface="in" units="millimolar" />
+    <variable name="ENaCl_" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="Cl_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ECl_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k11</ci>
+              <ci>Cl_</ci>
+              <ci>E_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k16</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k15</ci>
+              <ci>Na_</ci>
+              <ci>ECl_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k12</ci>
+              <ci>ECl_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENaCl" cmeta:id="ENaCl">
+    <variable initial_value="0.08333" name="ENaCl" public_interface="out" units="millimolar" />
+    <variable name="k7" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k8" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k5" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k6" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k19" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k20" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ENa" public_interface="in" units="millimolar" />
+    <variable name="ECl" public_interface="in" units="millimolar" />
+    <variable name="ENaCl_" public_interface="in" units="millimolar" />
+    <variable name="Na" public_interface="in" units="millimolar" />
+    <variable name="Cl" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENaCl</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k5</ci>
+              <ci>Cl</ci>
+              <ci>ENa</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k7</ci>
+              <ci>Na</ci>
+              <ci>ECl</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k20</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k6</ci>
+              <ci>ENaCl</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k8</ci>
+              <ci>ENaCl</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k19</ci>
+              <ci>ENaCl</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="ENaCl_" cmeta:id="ENaCl_">
+    <variable initial_value="0.08333" name="ENaCl_" public_interface="out" units="millimolar" />
+    <variable name="k15" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k16" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k13" public_interface="in" units="second_order_rate_constant" />
+    <variable name="k14" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k19" public_interface="in" units="first_order_rate_constant" />
+    <variable name="k20" public_interface="in" units="first_order_rate_constant" />
+    <variable name="ENa_" public_interface="in" units="millimolar" />
+    <variable name="ECl_" public_interface="in" units="millimolar" />
+    <variable name="ENaCl" public_interface="in" units="millimolar" />
+    <variable name="Na_" public_interface="in" units="millimolar" />
+    <variable name="Cl_" public_interface="in" units="millimolar" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>ENaCl_</ci>
+        </apply>
+        <apply>
+          <minus />
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k13</ci>
+              <ci>Cl_</ci>
+              <ci>ENa_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k15</ci>
+              <ci>Na_</ci>
+              <ci>ECl_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k19</ci>
+              <ci>ENaCl</ci>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <times />
+              <ci>k14</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k16</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+            <apply>
+              <times />
+              <ci>k20</ci>
+              <ci>ENaCl_</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="reaction_constants">
+    <variable initial_value="1.0E5" name="k1" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="4.183E5" name="k2" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k3" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="4.928E6" name="k4" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k5" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="1.065E6" name="k6" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k7" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="8.940E4" name="k8" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k9" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="4.183E5" name="k10" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k11" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="4.982E6" name="k12" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k13" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="1.065E6" name="k14" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k15" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="8.940E4" name="k16" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="4.587E5" name="k17" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k18" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E3" name="k19" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="2.180E2" name="k20" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k21" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="4.183E5" name="k22" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k23" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="3.192E1" name="k24" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k25" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="3.192E1" name="k26" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k27" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="1.389E5" name="k28" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k29" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="3.514E-1" name="k30" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="1.0E5" name="k31" public_interface="out" units="second_order_rate_constant" />
+    <variable initial_value="1.166E-1" name="k32" public_interface="out" units="first_order_rate_constant" />
+    <variable initial_value="50.0" name="Na" public_interface="out" units="millimolar" />
+    <variable initial_value="96.0" name="Cl" public_interface="out" units="millimolar" />
+    <variable initial_value="1.0E-6" name="D" public_interface="out" units="millimolar" />
+    <variable initial_value="40.0" name="Cl_" public_interface="out" units="millimolar" />
+    <variable initial_value="10.0" name="Na_" public_interface="out" units="millimolar" />
+    <variable initial_value="1.0E-6" name="D_" public_interface="out" units="millimolar" />
+  </component>
+  <connection>
+    <map_components component_1="ECl_" component_2="ENaCl_" />
+    <map_variables variable_1="ECl_" variable_2="ECl_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa_" component_2="ENaD_" />
+    <map_variables variable_1="ENa_" variable_2="ENa_" />
+  </connection>
+  <connection>
+    <map_components component_1="E_" component_2="ECl_" />
+    <map_variables variable_1="E_" variable_2="E_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl_" component_2="ENa_" />
+    <map_variables variable_1="ENaCl_" variable_2="ENaCl_" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENaD" />
+    <map_variables variable_1="D" variable_2="D" />
+    <map_variables variable_1="k22" variable_2="k22" />
+    <map_variables variable_1="k25" variable_2="k25" />
+    <map_variables variable_1="k26" variable_2="k26" />
+    <map_variables variable_1="k21" variable_2="k21" />
+    <map_variables variable_1="Na" variable_2="Na" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENaD" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="E_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="E" component_2="ECl" />
+    <map_variables variable_1="E" variable_2="E" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa" component_2="E" />
+    <map_variables variable_1="ENa" variable_2="ENa" />
+  </connection>
+  <connection>
+    <map_components component_1="ED" component_2="ENaD" />
+    <map_variables variable_1="ED" variable_2="ED" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaD" component_2="ENa" />
+    <map_variables variable_1="ENaD" variable_2="ENaD" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENa" />
+    <map_variables variable_1="k5" variable_2="k5" />
+    <map_variables variable_1="D" variable_2="D" />
+    <map_variables variable_1="k1" variable_2="k1" />
+    <map_variables variable_1="k6" variable_2="k6" />
+    <map_variables variable_1="k25" variable_2="k25" />
+    <map_variables variable_1="k26" variable_2="k26" />
+    <map_variables variable_1="Cl" variable_2="Cl" />
+    <map_variables variable_1="Na" variable_2="Na" />
+    <map_variables variable_1="k2" variable_2="k2" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="E" />
+    <map_variables variable_1="k23" variable_2="k23" />
+    <map_variables variable_1="D" variable_2="D" />
+    <map_variables variable_1="k18" variable_2="k18" />
+    <map_variables variable_1="k24" variable_2="k24" />
+    <map_variables variable_1="k1" variable_2="k1" />
+    <map_variables variable_1="k3" variable_2="k3" />
+    <map_variables variable_1="Cl" variable_2="Cl" />
+    <map_variables variable_1="k4" variable_2="k4" />
+    <map_variables variable_1="k17" variable_2="k17" />
+    <map_variables variable_1="Na" variable_2="Na" />
+    <map_variables variable_1="k2" variable_2="k2" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ECl_" />
+    <map_variables variable_1="k16" variable_2="k16" />
+    <map_variables variable_1="k11" variable_2="k11" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="k15" variable_2="k15" />
+    <map_variables variable_1="Cl_" variable_2="Cl_" />
+    <map_variables variable_1="k12" variable_2="k12" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ECl_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa" component_2="ENaD" />
+    <map_variables variable_1="ENa" variable_2="ENa" />
+  </connection>
+  <connection>
+    <map_components component_1="ECl" component_2="E" />
+    <map_variables variable_1="ECl" variable_2="ECl" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ED_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ED" component_2="E" />
+    <map_variables variable_1="ED" variable_2="ED" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENaCl" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ED" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl" component_2="ENaCl_" />
+    <map_variables variable_1="ENaCl" variable_2="ENaCl" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENa_" />
+    <map_variables variable_1="k32" variable_2="k32" />
+    <map_variables variable_1="D_" variable_2="D_" />
+    <map_variables variable_1="k10" variable_2="k10" />
+    <map_variables variable_1="k14" variable_2="k14" />
+    <map_variables variable_1="k13" variable_2="k13" />
+    <map_variables variable_1="k31" variable_2="k31" />
+    <map_variables variable_1="k9" variable_2="k9" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="Cl_" variable_2="Cl_" />
+  </connection>
+  <connection>
+    <map_components component_1="E_" component_2="ENa_" />
+    <map_variables variable_1="E_" variable_2="E_" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ED_" />
+    <map_variables variable_1="k27" variable_2="k27" />
+    <map_variables variable_1="D_" variable_2="D_" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="k28" variable_2="k28" />
+    <map_variables variable_1="k29" variable_2="k29" />
+    <map_variables variable_1="k30" variable_2="k30" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENaCl_" />
+    <map_variables variable_1="k16" variable_2="k16" />
+    <map_variables variable_1="k14" variable_2="k14" />
+    <map_variables variable_1="k13" variable_2="k13" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="k20" variable_2="k20" />
+    <map_variables variable_1="k15" variable_2="k15" />
+    <map_variables variable_1="k19" variable_2="k19" />
+    <map_variables variable_1="Cl_" variable_2="Cl_" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENaD_" />
+    <map_variables variable_1="k27" variable_2="k27" />
+    <map_variables variable_1="k32" variable_2="k32" />
+    <map_variables variable_1="D_" variable_2="D_" />
+    <map_variables variable_1="k31" variable_2="k31" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="k28" variable_2="k28" />
+  </connection>
+  <connection>
+    <map_components component_1="E" component_2="ED" />
+    <map_variables variable_1="E" variable_2="E" />
+  </connection>
+  <connection>
+    <map_components component_1="ECl_" component_2="E_" />
+    <map_variables variable_1="ECl_" variable_2="ECl_" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENa_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="E_" />
+    <map_variables variable_1="k18" variable_2="k18" />
+    <map_variables variable_1="D_" variable_2="D_" />
+    <map_variables variable_1="k10" variable_2="k10" />
+    <map_variables variable_1="k9" variable_2="k9" />
+    <map_variables variable_1="k11" variable_2="k11" />
+    <map_variables variable_1="Na_" variable_2="Na_" />
+    <map_variables variable_1="Cl_" variable_2="Cl_" />
+    <map_variables variable_1="k12" variable_2="k12" />
+    <map_variables variable_1="k17" variable_2="k17" />
+    <map_variables variable_1="k29" variable_2="k29" />
+    <map_variables variable_1="k30" variable_2="k30" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa_" component_2="E_" />
+    <map_variables variable_1="ENa_" variable_2="ENa_" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ECl" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ED_" component_2="E_" />
+    <map_variables variable_1="ED_" variable_2="ED_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa_" component_2="ENaCl_" />
+    <map_variables variable_1="ENa_" variable_2="ENa_" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENaD_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENa" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ENa" component_2="ENaCl" />
+    <map_variables variable_1="ENa" variable_2="ENa" />
+  </connection>
+  <connection>
+    <map_components component_1="ED_" component_2="ENaD_" />
+    <map_variables variable_1="ED_" variable_2="ED_" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="ENaCl_" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaD" component_2="ED" />
+    <map_variables variable_1="ENaD" variable_2="ENaD" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ED" />
+    <map_variables variable_1="k23" variable_2="k23" />
+    <map_variables variable_1="D" variable_2="D" />
+    <map_variables variable_1="k24" variable_2="k24" />
+    <map_variables variable_1="k22" variable_2="k22" />
+    <map_variables variable_1="k21" variable_2="k21" />
+    <map_variables variable_1="Na" variable_2="Na" />
+  </connection>
+  <connection>
+    <map_components component_1="E" component_2="ENa" />
+    <map_variables variable_1="E" variable_2="E" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl_" component_2="ECl_" />
+    <map_variables variable_1="ENaCl_" variable_2="ENaCl_" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="E" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ECl" />
+    <map_variables variable_1="k3" variable_2="k3" />
+    <map_variables variable_1="k8" variable_2="k8" />
+    <map_variables variable_1="Cl" variable_2="Cl" />
+    <map_variables variable_1="k4" variable_2="k4" />
+    <map_variables variable_1="Na" variable_2="Na" />
+    <map_variables variable_1="k7" variable_2="k7" />
+  </connection>
+  <connection>
+    <map_components component_1="E_" component_2="E" />
+    <map_variables variable_1="E_" variable_2="E_" />
+  </connection>
+  <connection>
+    <map_components component_1="reaction_constants" component_2="ENaCl" />
+    <map_variables variable_1="k5" variable_2="k5" />
+    <map_variables variable_1="k6" variable_2="k6" />
+    <map_variables variable_1="k20" variable_2="k20" />
+    <map_variables variable_1="k8" variable_2="k8" />
+    <map_variables variable_1="k19" variable_2="k19" />
+    <map_variables variable_1="Cl" variable_2="Cl" />
+    <map_variables variable_1="Na" variable_2="Na" />
+    <map_variables variable_1="k7" variable_2="k7" />
+  </connection>
+  <connection>
+    <map_components component_1="ECl" component_2="ENaCl" />
+    <map_variables variable_1="ECl" variable_2="ECl" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl" component_2="ECl" />
+    <map_variables variable_1="ENaCl" variable_2="ENaCl" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaD_" component_2="ED_" />
+    <map_variables variable_1="ENaD_" variable_2="ENaD_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl" component_2="ENa" />
+    <map_variables variable_1="ENaCl" variable_2="ENaCl" />
+  </connection>
+  <connection>
+    <map_components component_1="E" component_2="E_" />
+    <map_variables variable_1="E" variable_2="E" />
+  </connection>
+  <connection>
+    <map_components component_1="E_" component_2="ED_" />
+    <map_variables variable_1="E_" variable_2="E_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaD_" component_2="ENa_" />
+    <map_variables variable_1="ENaD_" variable_2="ENaD_" />
+  </connection>
+  <connection>
+    <map_components component_1="ENaCl_" component_2="ENaCl" />
+    <map_variables variable_1="ENaCl_" variable_2="ENaCl_" />
+  </connection>
+
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:model="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:opb="http://bhi.washington.edu/OPB#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <dcterms:title>A numerical model of the renal distal tubule</dcterms:title> 
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+        </rdf:type>
+        <rdf:li>transporters</rdf:li>
+        <rdf:li>ion channels</rdf:li>
+        <rdf:li>distal tubule</rdf:li>
+        <rdf:li>water and mineral metabolism</rdf:li>
+  </rdf:Description>
+  
+    <rdf:Description rdf:about="#chang_fujita_b_1999">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+        </rdf:type>
+        <rdf:li>
+            <rdf:Description rdf:about="#author1Vcard"/>
+        </rdf:li>
+        <rdf:li>
+            <rdf:Description rdf:about="#author2Vcard"/>
+        </rdf:li>
+    </rdf:Description>   
+    <rdf:Description rdf:about="#author1Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author1VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+    <rdf:Description rdf:about="#author2Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author2VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+    <rdf:Description rdf:about="#author1VcardN">
+      <vCard:FN>HANGIL CHANG</vCard:FN>
+      <vCard:Family>CHANG</vCard:Family>
+      <vCard:Given>HANGIL</vCard:Given>
+    </rdf:Description>    
+    <rdf:Description rdf:about="#author2VcardN">
+      <vCard:FN>TOSHIRO FUJITA</vCard:FN>
+      <vCard:Family>FUJITA</vCard:Family>
+      <vCard:Given>TOSHIRO</vCard:Given>
+    </rdf:Description>
+    
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <bqmodel:description rdf:resource="#article"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <bqmodel:description rdf:resource="https://www.ncbi.nlm.nih.gov/pubmed/10362782"/>
+    <dcterms:journal>The American Physiological Society</dcterms:journal>
+  </rdf:Description>
+  
+  <bibo:Article rdf:ID="article">
+    <dcterms:creator>HANGIL CHANG AND TOSHIRO FUJITA</dcterms:creator>
+    <dcterms:issued>1999</dcterms:issued>
+    <dcterms:title>A numerical model of the renal distal tubule</dcterms:title>
+    <bibo:volume>276</bibo:volume>
+    <bibo:issue>6</bibo:issue>
+    <bibo:pageStart>F931</bibo:pageStart>
+    <bibo:pageEnd>F951</bibo:pageEnd>
+    <dcterms:PMCID rdf:resource="10362782"/>
+    <dcterms:isPartOf rdf:resource="urn:issn:0000-0000"/>
+    <dcterms:isPartOf rdf:resource="#paper"/>
+  </bibo:Article>
+
+  <bibo:AckInThePaper rdf:ID="paper">
+    <dcterms:publisher rdf:resource="#the_publisher"/>
+    <bibo:ackList>
+        <rdf:Seq>
+            <rdf:li rdf:resource="#abc"/>
+            <rdf:li rdf:resource="#xyz"/>
+        </rdf:Seq>
+    </bibo:ackList>
+    <dcterms:issued>June, 1999</dcterms:issued>
+    <bibo:isbn>000000K</bibo:isbn>
+  </bibo:AckInThePaper>
+
+  <foaf:Organisation rdf:ID="the_publisher" foaf:name="The American Physiological Society" />
+
+  <foaf:Person rdf:ID="abc" foaf:name="a b c"/>
+  <foaf:Person rdf:ID="xyz" foaf:name="x y z"/>
+  
+    <rdf:Description rdf:about="#chang_fujita_b_1999">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+        </rdf:type>
+        <rdf:li>lumen</rdf:li>
+        <rdf:li>cytosol</rdf:li>
+        <rdf:li>tissue fluid</rdf:li>
+        <rdf:li>apical membrane</rdf:li>
+        <rdf:li>basolateral membrane</rdf:li>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+    <dcterms:isDescribedBy rdf:resource="#Na-Cl_cotransporter"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="Na-Cl_cotransporter">
+    <bqmodel:isInstanceOf rdf:resource="http://www.uniprot.org/uniprot/P55018"/>
+    <dcterms:Protein>Solute carrier family 12 member 3</dcterms:Protein>
+    <dcterms:Gene>Slc12a3</dcterms:Gene>
+    <dcterms:Species>Rattus norvegicus (Rat)</dcterms:Species>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+    <dcterms:isDescribedBy rdf:resource="#K-Cl_cotransporter"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="K-Cl_cotransporter">
+    <bqmodel:isInstanceOf rdf:resource="http://www.uniprot.org/uniprot/P55016"/>
+    <dcterms:Protein>Solute carrier family 12 member 1</dcterms:Protein>
+    <dcterms:Gene>Slc12a1</dcterms:Gene>
+    <dcterms:Species>Rattus norvegicus (Rat)</dcterms:Species>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+    <dcterms:isDescribedBy rdf:resource="#Na_channel"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="Na_channel">
+    <ro:located_in rdf:resource="http://identifiers.org/go/GO:0005272"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+    <dcterms:isDescribedBy rdf:resource="#K_channel"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="K_channel">
+    <ro:located_in rdf:resource="http://identifiers.org/go/GO:0005267"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+    <dcterms:isDescribedBy rdf:resource="#Cl_channel"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="Cl_channel">
+    <ro:located_in rdf:resource="http://identifiers.org/go/GO:0005254"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84669"/>
+    <dcterms:isDescribedBy rdf:resource="#Na-K-ATPase"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:ID="Na-K-ATPase">
+    <ro:located_in rdf:resource="http://identifiers.org/go/GO:0005391"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84669"/>
+    <dcterms:isDescribedBy rdf:resource="#K_channel"/>    
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84669"/>
+    <dcterms:isDescribedBy rdf:resource="#Cl_channel"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="paracellular_pathway"/>
+    <dcterms:isDescribedBy rdf:resource="#Na_channel"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="paracellular_pathway"/>
+    <dcterms:isDescribedBy rdf:resource="#K_channel"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <ro:located_in rdf:resource="paracellular_pathway"/>
+    <dcterms:isDescribedBy rdf:resource="#Cl_channel"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#chang_fujita_b_1999">
+    <bqmodel:isDescribedBy rdf:resource="http://ajprenal.physiology.org/content/276/6/F931.long"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k14">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ENaCl_ to state ENa_ on the intracellular compartment side</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.k27">
+      <dcterms:description>transitional rate of binding Na_ ion from state ED_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_64">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma74550" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.k23">
+      <dcterms:description>transitional rate of binding D from state E to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.E_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_44">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_3">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma66836" />
+                </rdf:Description>
+              </ro:part_of>
+              <dcterms:description />
+              <semsim:name>Concentration of molecule binding with sodium, chloride, and thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.ECl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_68">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_12">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with chloride</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.Cl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_65">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_9">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:17996" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.ENaCl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_66">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_19">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium and chloride</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k30">
+      <dcterms:description>transitional rate of dissociation D_ from state ED_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k20">
+      <dcterms:description>transitional rate from state ENaCl_ to state ENaCl on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.k28">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaD_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.k22">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaD to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.ECl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_12">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_12" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k8">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaCl to stae ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.D_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_77">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_13">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:50264" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.ENaD">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_39">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_16">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium and thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k9">
+      <dcterms:description>transitional rate of binding Na_ ion from state E_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.ENaD">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_18">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_16" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.D_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_13">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.ECl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_50">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_6">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with chloride</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.k31">
+      <dcterms:description>transitional rate of binding D_ from state ENa_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.D_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_47">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.k29">
+      <dcterms:description>transitional rate of binding D_ from state E_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.Cl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_73">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k7">
+      <dcterms:description>transitional rate of binding Na+ from state ECl to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.ENaCl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_45">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_19" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_17">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_0">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>Concentration of molecule binding with sodium, chloride, and thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k20">
+      <dcterms:description>transitional rate from state ENaCl_ to state ENaCl on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k20">
+      <dcterms:description>transitional rate from state ENaCl_ to state ENaCl on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k32">
+      <dcterms:description>transitional rate of dissociation D_ from state ENaD_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_10">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_40">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_7">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:50264" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k13">
+      <dcterms:description>transitional rate of binding Cl_ ion from state ENa_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.k24">
+      <dcterms:description>transitional rate of dissociation D from state ED to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.ED_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_21">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_10">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.ENaCl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_69">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_18">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium and chloride</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k6">
+      <dcterms:description>transitional rate of dissociation Cl- from state ENaCl to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_29">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_19">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.ED">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_1">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_2">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k9">
+      <dcterms:description>transitional rate of binding Na_ ion from state E_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k9">
+      <dcterms:description>transitional rate of binding Na_ ion from state E_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k31">
+      <dcterms:description>transitional rate of binding D_ from state ENa_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k30">
+      <dcterms:description>transitional rate of dissociation D_ from state ED_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.Cl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_49">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_15">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:17996" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.E_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_8">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.ENa_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_33">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_11">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.ECl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_55">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_12" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_72">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_37">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.ENaCl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_57">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_19" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k10">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENa_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.ENa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_36">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_5">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_1" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.ENaD_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_31">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_17">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <dcterms:description />
+              <semsim:name>concentration of molecule binding with sodium and thiazide</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k22">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaD to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k8">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaCl to stae ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k10">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENa_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.ENaCl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_60">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_18" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k29">
+      <dcterms:description>transitional rate of binding D_ from state E_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.ED_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_32">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_10" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.ED_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_9">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_10" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k17">
+      <dcterms:description>transitional rate from state E to state E_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.ENaCl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_38">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_18" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.k11">
+      <dcterms:description>transitional rate of binding Cl_ ion from state E_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_74">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k2">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENa to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k21">
+      <dcterms:description>transitional rate of binding Na+ from state ED to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k7">
+      <dcterms:description>transitional rate of binding Na+ from state ECl to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.k28">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaD_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.k21">
+      <dcterms:description>transitional rate of binding Na+ from state ED to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.k12">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ECl_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_14">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_4" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k32">
+      <dcterms:description>transitional rate of dissociation D_ from state ENaD_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k19">
+      <dcterms:description>transitional rate from state ENaCl to state ENaCl_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k1">
+      <dcterms:description>transitional rate of binding Na+ from state E to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k17">
+      <dcterms:description>transitional rate from state E to state E_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k5">
+      <dcterms:description>transitional rate of binding Cl- from state ENa to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_35">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.D_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_34">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k1">
+      <dcterms:description>transitional rate of binding Na+ from state E to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k12">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ECl_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k24">
+      <dcterms:description>transitional rate of dissociation D from state ED to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.E_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_56">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k6">
+      <dcterms:description>transitional rate of dissociation Cl- from state ENaCl to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.k3">
+      <dcterms:description>transitional rate of binding Cl- from state E to state ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.k26">
+      <dcterms:description>transitional rate of dissociation D from state ENaD to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.ED">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_16">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k2">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENa to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.ENaD_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_23">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.ENa_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_43">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k18">
+      <dcterms:description>transitional rate from state E_ to state E on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k4">
+      <dcterms:description>transitional rate of dissociation Cl- from state ECl to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_70">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.Cl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_59">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_15" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k11">
+      <dcterms:description>transitional rate of binding Cl_ ion from state E_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k23">
+      <dcterms:description>transitional rate of binding D from state E to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.ENa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_28">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_5" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.k4">
+      <dcterms:description>transitional rate of dissociation Cl- from state ECl to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k18">
+      <dcterms:description>transitional rate from state E_ to state E on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k19">
+      <dcterms:description>transitional rate from state ENaCl to state ENaCl_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k3">
+      <dcterms:description>transitional rate of binding Cl- from state E to state ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k3">
+      <dcterms:description>transitional rate of binding Cl- from state E to state ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_53">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k14">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ENaCl_ to state ENa_ on the intracellular compartment side</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_30">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.Cl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_54">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.k30">
+      <dcterms:description>transitional rate of dissociation D_ from state ED_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k26">
+      <dcterms:description>transitional rate of dissociation D from state ENaD to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.ENaD">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_26">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_16" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k25">
+      <dcterms:description>transitional rate of binding D from state ENa to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.k31">
+      <dcterms:description>transitional rate of binding D_ from state ENa_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.Cl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_75">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_15" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k2">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENa to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k6">
+      <dcterms:description>transitional rate of dissociation Cl- from state ENaCl to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.ENa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_3">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_5" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k13">
+      <dcterms:description>transitional rate of binding Cl_ ion from state ENa_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k25">
+      <dcterms:description>transitional rate of binding D from state ENa to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k12">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ECl_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.ECl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_62">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.ENa_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_67">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.Cl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_15">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_15" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.ENa">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_61">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_5" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k4">
+      <dcterms:description>transitional rate of dissociation Cl- from state ECl to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.ECl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_4">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.k15">
+      <dcterms:description>transitional rate of binding Na_ ion from state ECl_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.k25">
+      <dcterms:description>transitional rate of binding D from state ENa to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k26">
+      <dcterms:description>transitional rate of dissociation D from state ENaD to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.k5">
+      <dcterms:description>transitional rate of binding Cl- from state ENa to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k1">
+      <dcterms:description>transitional rate of binding Na+ from state E to state ENa on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.k22">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaD to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.k7">
+      <dcterms:description>transitional rate of binding Na+ from state ECl to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.ENaCl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_52">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_18" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.ENa_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_11">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k16">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaCl_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k16">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaCl_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.k16">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaCl_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k28">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENaD_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.k27">
+      <dcterms:description>transitional rate of binding Na_ ion from state ED_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.E_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_22">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.k8">
+      <dcterms:description>transitional rate of dissociation Na+ from state ENaCl to stae ECl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k15">
+      <dcterms:description>transitional rate of binding Na_ ion from state ECl_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k15">
+      <dcterms:description>transitional rate of binding Na_ ion from state ECl_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k27">
+      <dcterms:description>transitional rate of binding Na_ ion from state ED_ to state ENaD_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl.E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_51">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.k5">
+      <dcterms:description>transitional rate of binding Cl- from state ENa to state ENaCl on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k23">
+      <dcterms:description>transitional rate of binding D from state E to state ED on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_20">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#environment.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k14">
+      <dcterms:description>transitional rate of dissociation Cl_ ion from state ENaCl_ to state ENa_ on the intracellular compartment side</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k18">
+      <dcterms:description>transitional rate from state E_ to state E on the intracellular compartment to luminal compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.ED">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_27">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD_.k32">
+      <dcterms:description>transitional rate of dissociation D_ from state ENaD_ to state ENa_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.D_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_24">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.E_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_2">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.k24">
+      <dcterms:description>transitional rate of dissociation D from state ED to state E on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ED_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_25">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.k21">
+      <dcterms:description>transitional rate of binding Na+ from state ED to state ENaD on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_48">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ECl_.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_58">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.k13">
+      <dcterms:description>transitional rate of binding Cl_ ion from state ENa_ to state ENaCl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k17">
+      <dcterms:description>transitional rate from state E to state E_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k29">
+      <dcterms:description>transitional rate of binding D_ from state E_ to state ED_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.Cl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_42">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k11">
+      <dcterms:description>transitional rate of binding Cl_ ion from state E_ to state ECl_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_6">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl_.Cl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_71">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_15" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.Cl">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_7">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_9" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of chloride on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_5">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaD.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.Na_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_76">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa_.ENaD_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_46">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and thiazide on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E_.k10">
+      <dcterms:description>transitional rate of dissociation Na_ ion from state ENa_ to state E_ on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENa.Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_41">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#reaction_constants.k19">
+      <dcterms:description>transitional rate from state ENaCl to state ENaCl_ on the luminal compartment to intracellular compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_0">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule for binding with sodium, chloride, and thiazide on the luminal compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#E.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#ENaCl.ENaCl_">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_63">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_19" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of TSC molecule binding with sodium and chloride on the intracellular compartment</dcterms:description>
+    </rdf:Description>
+  </rdf:RDF>
+</model>

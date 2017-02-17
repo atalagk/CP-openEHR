@@ -4,6 +4,15 @@ import xmltodict
 from collections import OrderedDict
 import pprint
 
+'''
+chang_fujita_1999
+chang_fujita_b_1999
+eskandari_2005
+mackenzie_1996
+moss_2009
+thomas_2000
+weinstein_1995
+'''
 
 def setpmrurl(cellmlname):
     url = 'https://models.physiomeproject.org'
@@ -42,5 +51,6 @@ if __name__ == "__main__":
     for v in o:
         x = o[v]
         print(x)
+
 
 
