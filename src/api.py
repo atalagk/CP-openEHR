@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask import make_response
+import parse_pmr
 app = Flask(__name__)
 
 @app.route("/")
@@ -7,40 +8,11 @@ def home():
     return "You hit home"
 
 @app.route('/pmr', methods=['GET', 'POST'])
-def login():
-
-    def getpmrurl(cellmlname):
-        url = 'https://models.physiomeproject.org'
-        url += '/workspace/267/rawfile/59b35d8439d9ea5e9309bc461e2b795dd1d8c796/semgen-annotation/'
-        url += cellmlname
-        return url
-
-    def get_model(url):
-        import requests
-        headers = {'Accept': 'Accept: application/vnd.physiome.pmr2.json.1'}
-        r = requests.get(url, headers=headers)
-        return r.text
-
-    def get_annot(cellml):
-        import xmltodict, json
-        url = getpmrurl('chang_fujita_1999-semgen.cellml')
-        xml = get_model(url)
-        d = xmltodict.parse(xml)
-
-        al = d['model']['rdf:RDF']['rdf:Description']
-
-        an = al[10:len(al):]
-        j = json.dumps(an)
-
-        return j
-
-
+def pyapi():
     if request.method == 'POST':
         modelname = request.form['cellml']
-        pmrurl = getpmrurl(modelname)
-        cellmodel = get_model(pmrurl)
-        annots = get_annot(cellmodel)
-        resp = make_response(annots)
+        annotjson = parse_pmr.get_annots(modelname)
+        resp = make_response(annotjson)
         resp.headers['Content-Type'] = "text/json"
         return resp
 
