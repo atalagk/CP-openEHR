@@ -32,8 +32,9 @@ def xmltree_to_rdfgraph(tree):
     for triple in graph:
         s, p, o = triple
         # make sure to exclude non URI stuff
-        if str(p) != 'http://purl.org/dc/terms/description' and\
-            str(o).startswith('http://') and\
+        # if str(p) != 'http://purl.org/dc/terms/description' and\
+        if str(p).startswith('http') and\
+            str(o).startswith('http://identifiers.org') and\
             str(s).startswith('http'):
             real_result.add((torelative(s), torelative(p), torelative(o)))
     return real_result
