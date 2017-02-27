@@ -2,47 +2,28 @@ from io import BytesIO
 import requests
 from lxml import etree
 from rdflib.graph import Graph
-from rdflib import URIRef
 import pprint
 import json
 
-upstreamneedtolearntoknowwtfisiri = 'rdflibfailsathandlingrelativeirisorurnsoranything://oh/'
 
-def setpmrurl(cellmlname):
-    url = 'https://models.physiomeproject.org'
-    url += '/workspace/267/rawfile/59b35d8439d9ea5e9309bc461e2b795dd1d8c796/semgen-annotation/'
-    url += cellmlname
-    return url
+def getcellmltree(location):
+    if str(location).startswith('http'):
+        r = requests.get(location)
+        cml = r.content
+    else:
+        with open(location, 'r') as cml:
+            cml = bytes(cml.read(), encoding='utf-8')
+    return etree.parse(BytesIO(cml))
+
 
 def xmltree_to_rdfgraph(tree):
     nodes = tree.xpath('..//rdf:RDF', namespaces={'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'})
     graph = Graph()
     for node in nodes:
         s = BytesIO(etree.tostring(node))
-        graph.parse(s, format='xml', publicID=upstreamneedtolearntoknowwtfisiri)
+        graph.parse(s, format='xml')
+    return graph
 
-    def torelative(node):
-        if not isinstance(node, URIRef):
-            return node
-        if node.startswith(upstreamneedtolearntoknowwtfisiri):
-            return URIRef(node.replace(upstreamneedtolearntoknowwtfisiri, ''))
-        return node
-
-    real_result = Graph()
-    for triple in graph:
-        s, p, o = triple
-        # make sure to exclude non URI stuff
-        # if str(p) != 'http://purl.org/dc/terms/description' and\
-        if str(p).startswith('http') and\
-            str(o).startswith('http://identifiers.org') and\
-            str(s).startswith('http'):
-            real_result.add((torelative(s), torelative(p), torelative(o)))
-    return real_result
-
-
-def get_tree_from_url(url):
-    r = requests.get(url)
-    return etree.parse(BytesIO(r.content))
 
 def get_json(rdfs):
     tl = []
@@ -50,44 +31,37 @@ def get_json(rdfs):
     js = []
     i = 1
     for s, p, o in rdfs:
-        tl.append(str(s))
-        tl.append(str(p))
-        tl.append(str(o))
-        tr = {str(i): tl}
-        i += 1
-        js.append(tr)
-        tl = []
+        if s.startswith('http://identifiers.org') or \
+        p.startswith('http://identifiers.org') or \
+        o.startswith('http://identifiers.org'):
+
+            tl.append(str(s))
+            tl.append(str(p))
+            tl.append(str(o))
+            tr = {str(i): tl}
+            i += 1
+            js.append(tr)
+            tl = []
     return js
 
 def get_annots(cellmlname):
-    url = setpmrurl(cellmlname)
-    tree = get_tree_from_url(url)
+    tree = getcellmltree(cellmlname)
     grrdf = xmltree_to_rdfgraph(tree)
     js = get_json(grrdf)
     return json.dumps(js)
 
 
 if __name__ == "__main__":
-    annots = get_annots('chang_fujita_1999-semgen.cellml')
-    print(annots)
+    annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
+    #annots = get_annots('..\\models\chang_fujita_1999-semgen.cellml')
+    pprint.pprint(annots)
 
     '''
-    tree = get_tree_from_url(url)
-    grrdf = xmltree_to_rdfgraph(tree)
-    js = get_json(grrdf)
-
-        #print('s: ' + str(s))
-        #print('p: ' + str(p))
-        #print('o: ' + str(o))
-        #print()
-    #print(js)
-    pprint.pprint(js)
-
-    chang_fujita_1999
-    chang_fujita_b_1999
-    eskandari_2005
-    mackenzie_1996
-    moss_2009
-    thomas_2000
-    weinstein_1995
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_b_1999-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/eskandari_2005-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/mackenzie_1996-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/moss_2009-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/thomas_2000-semgen.cellml
+    https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/weinstein_1995-semgen.cellml
     '''

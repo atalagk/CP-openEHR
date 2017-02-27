@@ -1,0 +1,520 @@
+[
+    {
+        "1": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_34",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "2": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_21",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "3": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#environment.time",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_01023"
+        ]
+    },
+    {
+        "4": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_28",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:9937"
+        ]
+    },
+    {
+        "5": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_9",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00509"
+        ]
+    },
+    {
+        "6": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_9",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/go/GO:0008217"
+        ]
+    },
+    {
+        "7": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_18",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "8": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_20",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "9": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_29",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "10": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_6",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "11": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_44",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "12": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_40",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "13": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_22",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "14": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_13",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "15": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_35",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "16": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_33",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "17": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_38",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "18": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_19",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "19": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_37",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "20": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_18",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "21": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#model_parameters.time",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_01023"
+        ]
+    },
+    {
+        "22": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_14",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "23": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_14",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "24": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_52",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "25": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "26": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_3",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "27": [
+            "#moss_2009",
+            "http://biomodels.net/model-qualifiers/isDescribedBy",
+            "http://identifiers.org/doi/10.1098/rsta.2008.0313"
+        ]
+    },
+    {
+        "28": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_23",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "29": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_46",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "30": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_11",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "31": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_29",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/go/GO:0072068"
+        ]
+    },
+    {
+        "32": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_26",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "33": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_32",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "34": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_25",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "35": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_30",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "36": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_7",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "37": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_51",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "38": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_17",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "39": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_50",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "40": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_16",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "41": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_12",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "42": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_13",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "43": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_1",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "44": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "45": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_36",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "46": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_41",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "47": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_4",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "48": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_2",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00509"
+        ]
+    },
+    {
+        "49": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_22",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "50": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_27",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:15377"
+        ]
+    },
+    {
+        "51": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_20",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "52": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_39",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "53": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_47",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "54": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_31",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "55": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_24",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "56": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_8",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "57": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_28",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "58": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_42",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "59": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_26",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "60": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_43",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "61": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_5",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "62": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_27",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "63": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_48",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "64": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "65": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_45",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "66": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_30",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:27584"
+        ]
+    },
+    {
+        "67": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_10",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "68": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_15",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "69": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_53",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "70": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_17",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "71": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_0",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    },
+    {
+        "72": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_4",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/chebi/CHEBI:26708"
+        ]
+    },
+    {
+        "73": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_11",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00154"
+        ]
+    },
+    {
+        "74": [
+            "http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_49",
+            "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+            "http://identifiers.org/opb/OPB_00340"
+        ]
+    }
+]

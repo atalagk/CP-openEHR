@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="weinstein_1995" cmeta:id="weinstein_1995">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <articleinfo>
+        <title>A kinetically defined Na+/H+ antiporter within a mathematical model of the rat proximal tubule</title>
+        <author>
+          <firstname>Jonna</firstname>
+          <surname>Terkildsen</surname>
+          <affiliation>
+            <shortaffil>Auckland Bioengineering Institute, University of Auckland</shortaffil>
+          </affiliation>
+        </author>
+      </articleinfo>
+      <sect1 id="sec_status">
+        <title>Model Status</title>
+        <para>This CellML model..........................................</para>
+      </sect1>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>ABSTRACT: The luminal membrane antiporter of the proximal tubule has been represented using the kinetic formulation of E. Heinz (1978. Mechanics and Engergetics of Biological Transport. Springer-Verlag, Berlin) with the assumption of equilibrium binding and 1:1 stoichiometry. Competitive binding and transport of NH+4 is included within this model. Ion affinities and permeation velocities were selected in a least-squares fit to the kinetic parameters determined experimentally in renal membrane vesicles (Aronson, P.S., M.A. Suhm, and J. Nee. 1983. Journal of Biological Chemistry. 258:6767-6771). The modifier role of internal H+ to enhance transport beyond the expected kinetics (Aronson, P.S., J. Nee, and M. A. Suhm. 1982. Nature. 299:161-163) is represented as a velocity effect of H+ binding to a single site. This kinetic formulation of the Na+/H+ antiporter was incorporated within a model of the rat proximal tubule (Weinstein, A. M. 1994. American Journal of Physiology. 267:F237-F248) as a replacement for the representation by linear nonequilibrium thermodynamics (NET). The membrane density of the antiporter was selected to yield agreement with the rate of tubular Na+ reabsorption. Simulation of 0.5 cm of tubule predicts that the activity of the Na+/H+ antiporter is the most important force for active secretion of ammonia. Model calculations of metabolic acid-base disturbances are performed and comparison is made among antiporter representations (kinetic model, kinetic model without internal modifier, and NET formulation). It is found that the ability to sharply turn off Na+/H+ exchange in cellular alkalosis substantially eliminates the cell volume increase associated with high HCO3- conditions. In the tubule model, diminished Na+/H+ exchange in alkalosis blunts the axial decrease in luminal HCO3- and thus diminishes paracellular reabsorption of Cl-. In this way, the kinetics of the Na+/H+ antiporter could act to enhance distal delivery of Na+, Cl-, and HCO3- in acute metabolic alkalosis.</para>
+        <para>The original paper reference is cited below:</para>
+        <para>
+          A kinetically defined Na+/H+ antiporter within a mathematical model of the rat proximal tubule, A.M. Weinstein, 1995,
+          <emphasis>The Journal of General Physiology</emphasis>
+          , 105, 617-641.
+          <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/7658195">PubMed ID: 7658195</ulink>
+        </para>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <objectinfo>
+                <title>model diagram</title>
+              </objectinfo>
+              <imagedata fileref="weinstein_1995.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>Schematic representation of the Na+/H+ antiporter. The carrier may either be empty, X, or bound to one of three ions, Na+, H+, or NH+4, designated XA, XB, or XC. Binding is rapid, and defined by equilibrium constants Ka, Kb, and K~. The carrier or carrier-ion complex may face either the external (') or internal (") membrane surface. Tramlocation of the loaded carrier occurs according to rate coefficients Pa, Pb, and Pc. There is no translocation of empty carrier.</caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="mM">
+    <unit exponent="-1.0" units="litre" />
+    <unit prefix="milli" units="mole" />
+  </units>
+  <units name="mmol">
+    <unit prefix="milli" units="mole" />
+  </units>
+  <units name="per_s">
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="nmol">
+    <unit prefix="nano" units="mole" />
+  </units>
+  <units name="cm2">
+    <unit exponent="2.0" prefix="centi" units="metre" />
+  </units>
+  <units name="mmol_per_s_per_cm2">
+    <unit exponent="-1.0" units="cm2" />
+    <unit exponent="-1.0" units="second" />
+    <unit units="mmol" />
+  </units>
+  <units name="M">
+    <unit units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="cm">
+    <unit prefix="centi" units="metre" />
+  </units>
+  <units name="umol">
+    <unit prefix="micro" units="mole" />
+  </units>
+  <units name="nmol_per_s_per_cm2">
+    <unit units="nmol" />
+    <unit exponent="-1.0" units="cm2" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <units name="mM_per_s">
+    <unit units="mM" />
+    <unit exponent="-1.0" units="second" />
+  </units>
+  <component name="environment">
+    <variable name="time" public_interface="out" units="second" />
+  </component>
+  <component name="Concentrations">
+    <variable cmeta:id="v001" initial_value="140" name="C_ext_Na" public_interface="out" units="mM" />
+    <variable cmeta:id="v002" initial_value="4.95e-2" name="C_ext_H" public_interface="out" units="mM" />
+    <variable cmeta:id="v003" initial_value="0.2" name="C_ext_NH4" public_interface="out" units="mM" />
+    <variable cmeta:id="v004" initial_value="19.6" name="C_int_Na" public_interface="out" units="mM" />
+    <variable initial_value="1e-3" name="C_int_H" public_interface="out" units="mM" />
+    <variable initial_value="0.23" name="C_int_NH4" public_interface="out" units="mM" />
+    <variable name="time" public_interface="in" units="second" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <apply>
+          <diff />
+          <bvar>
+            <ci>time</ci>
+          </bvar>
+          <ci>C_ext_Na</ci>
+        </apply>
+        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM_per_s">10</cn>
+      </apply>
+    </math>
+  </component>
+  <component name="NHE3_Parameters">
+    <variable initial_value="1.6e-3" name="XTxP0_NHE3_Na" public_interface="out" units="nmol_per_s_per_cm2" />
+    <variable initial_value="0.48e-3" name="XTxP0_NHE3_H" public_interface="out" units="nmol_per_s_per_cm2" />
+    <variable initial_value="1.6e-3" name="XTxP0_NHE3_NH4" public_interface="out" units="nmol_per_s_per_cm2" />
+    <variable initial_value="0.03e3" name="K_NHE3_Na" public_interface="out" units="mM" />
+    <variable initial_value="72e-6" name="K_NHE3_H" public_interface="out" units="mM" />
+    <variable initial_value="0.027e3" name="K_NHE3_NH4" public_interface="out" units="mM" />
+  </component>
+  <component name="NHE3">
+    <variable name="C_ext_Na" public_interface="in" units="mM" />
+    <variable name="C_ext_H" public_interface="in" units="mM" />
+    <variable name="C_ext_NH4" public_interface="in" units="mM" />
+    <variable name="C_int_Na" public_interface="in" units="mM" />
+    <variable name="C_int_H" public_interface="in" units="mM" />
+    <variable name="C_int_NH4" public_interface="in" units="mM" />
+    <variable name="XTxP0_NHE3_Na" public_interface="in" units="nmol_per_s_per_cm2" />
+    <variable name="XTxP0_NHE3_H" public_interface="in" units="nmol_per_s_per_cm2" />
+    <variable name="XTxP0_NHE3_NH4" public_interface="in" units="nmol_per_s_per_cm2" />
+    <variable name="XTxP_NHE3_Na" units="nmol_per_s_per_cm2" />
+    <variable name="XTxP_NHE3_H" units="nmol_per_s_per_cm2" />
+    <variable name="XTxP_NHE3_NH4" units="nmol_per_s_per_cm2" />
+    <variable cmeta:id="v025" name="K_NHE3_Na" public_interface="in" units="mM" />
+    <variable name="K_NHE3_H" public_interface="in" units="mM" />
+    <variable name="K_NHE3_NH4" public_interface="in" units="mM" />
+    <variable name="alpha_ext_Na" units="dimensionless" />
+    <variable name="beta_ext_H" units="dimensionless" />
+    <variable name="gamma_ext_NH4" units="dimensionless" />
+    <variable name="alpha_int_Na" units="dimensionless" />
+    <variable name="beta_int_H" units="dimensionless" />
+    <variable name="gamma_int_NH4" units="dimensionless" />
+    <variable cmeta:id="v034" name="sum_NHE3" units="nmol_per_s_per_cm2" />
+    <variable cmeta:id="v035" name="J_NHE3_Na" public_interface="out" units="nmol_per_s_per_cm2" />
+    <variable name="J_NHE3_H" public_interface="out" units="nmol_per_s_per_cm2" />
+    <variable name="J_NHE3_NH4" public_interface="out" units="nmol_per_s_per_cm2" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <eq />
+        <ci>alpha_ext_Na</ci>
+        <apply>
+          <divide />
+          <ci>C_ext_Na</ci>
+          <ci>K_NHE3_Na</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>beta_ext_H</ci>
+        <apply>
+          <divide />
+          <ci>C_ext_H</ci>
+          <ci>K_NHE3_H</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>gamma_ext_NH4</ci>
+        <apply>
+          <divide />
+          <ci>C_ext_NH4</ci>
+          <ci>K_NHE3_NH4</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>alpha_int_Na</ci>
+        <apply>
+          <divide />
+          <ci>C_int_Na</ci>
+          <ci>K_NHE3_Na</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>beta_int_H</ci>
+        <apply>
+          <divide />
+          <ci>C_int_H</ci>
+          <ci>K_NHE3_H</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>gamma_int_NH4</ci>
+        <apply>
+          <divide />
+          <ci>C_int_NH4</ci>
+          <ci>K_NHE3_NH4</ci>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>XTxP_NHE3_Na</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>XTxP0_NHE3_Na</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            <ci>C_int_H</ci>
+          </apply>
+          <apply>
+            <plus />
+            <ci>C_int_H</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM" type="e-notation">
+              1
+              <sep />
+              -6
+            </cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>XTxP_NHE3_H</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>XTxP0_NHE3_H</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            <ci>C_int_H</ci>
+          </apply>
+          <apply>
+            <plus />
+            <ci>C_int_H</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM" type="e-notation">
+              1
+              <sep />
+              -6
+            </cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>XTxP_NHE3_NH4</ci>
+        <apply>
+          <divide />
+          <apply>
+            <times />
+            <ci>XTxP0_NHE3_NH4</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2</cn>
+            <ci>C_int_H</ci>
+          </apply>
+          <apply>
+            <plus />
+            <ci>C_int_H</ci>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="mM" type="e-notation">
+              1
+              <sep />
+              -6
+            </cn>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>sum_NHE3</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+              <ci>alpha_ext_Na</ci>
+              <ci>beta_ext_H</ci>
+              <ci>gamma_ext_NH4</ci>
+            </apply>
+            <apply>
+              <plus />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>alpha_int_Na</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_H</ci>
+                <ci>beta_int_H</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_NH4</ci>
+                <ci>gamma_int_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1</cn>
+              <ci>alpha_int_Na</ci>
+              <ci>beta_int_H</ci>
+              <ci>gamma_int_NH4</ci>
+            </apply>
+            <apply>
+              <plus />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>alpha_ext_Na</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_H</ci>
+                <ci>beta_ext_H</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_NH4</ci>
+                <ci>gamma_ext_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J_NHE3_Na</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>XTxP_NHE3_H</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>alpha_ext_Na</ci>
+                <ci>beta_int_H</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>alpha_int_Na</ci>
+                <ci>beta_ext_H</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>XTxP_NHE3_NH4</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>alpha_ext_Na</ci>
+                <ci>gamma_int_NH4</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>alpha_int_Na</ci>
+                <ci>gamma_ext_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J_NHE3_H</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>XTxP_NHE3_H</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>alpha_int_Na</ci>
+                <ci>beta_ext_H</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>alpha_ext_Na</ci>
+                <ci>beta_int_H</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_H</ci>
+                <ci>XTxP_NHE3_NH4</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>beta_ext_H</ci>
+                <ci>gamma_int_NH4</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>beta_int_H</ci>
+                <ci>gamma_ext_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+      <apply>
+        <eq />
+        <ci>J_NHE3_NH4</ci>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_Na</ci>
+                <ci>XTxP_NHE3_NH4</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>alpha_int_Na</ci>
+                <ci>gamma_ext_NH4</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>alpha_ext_Na</ci>
+                <ci>gamma_int_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <ci>XTxP_NHE3_H</ci>
+                <ci>XTxP_NHE3_NH4</ci>
+              </apply>
+              <ci>sum_NHE3</ci>
+            </apply>
+            <apply>
+              <minus />
+              <apply>
+                <times />
+                <ci>gamma_ext_NH4</ci>
+                <ci>beta_int_H</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>beta_ext_H</ci>
+                <ci>gamma_int_NH4</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <connection>
+    <map_components component_1="Concentrations" component_2="NHE3" />
+    <map_variables variable_1="C_ext_H" variable_2="C_ext_H" />
+    <map_variables variable_1="C_int_Na" variable_2="C_int_Na" />
+    <map_variables variable_1="C_ext_NH4" variable_2="C_ext_NH4" />
+    <map_variables variable_1="C_int_H" variable_2="C_int_H" />
+    <map_variables variable_1="C_ext_Na" variable_2="C_ext_Na" />
+    <map_variables variable_1="C_int_NH4" variable_2="C_int_NH4" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="Concentrations" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="NHE3_Parameters" component_2="NHE3" />
+    <map_variables variable_1="K_NHE3_NH4" variable_2="K_NHE3_NH4" />
+    <map_variables variable_1="K_NHE3_Na" variable_2="K_NHE3_Na" />
+    <map_variables variable_1="XTxP0_NHE3_Na" variable_2="XTxP0_NHE3_Na" />
+    <map_variables variable_1="XTxP0_NHE3_H" variable_2="XTxP0_NHE3_H" />
+    <map_variables variable_1="XTxP0_NHE3_NH4" variable_2="XTxP0_NHE3_NH4" />
+    <map_variables variable_1="K_NHE3_H" variable_2="K_NHE3_H" />
+  </connection>
+
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:model="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:opb="http://bhi.washington.edu/OPB#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    
+  <rdf:Description rdf:about="#weinstein_1995">
+    <dcterms:title>A Kinetically Defined Na +/H + Antiporter within a Mathematical Model of the Rat Proximal Tubule</dcterms:title> 
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#weinstein_1995">
+    <rdf:type>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+    </rdf:type>            
+    <rdf:li>Na+/H+ antiporter</rdf:li>
+    <rdf:li>ion transport</rdf:li>
+    <rdf:li>NHE3</rdf:li>
+  </rdf:Description>
+    
+  <rdf:Description rdf:about="#weinstein_1995">
+    <rdf:type>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+    </rdf:type>
+    <rdf:li>
+        <rdf:Description rdf:about="#author1Vcard"/>
+    </rdf:li>
+  </rdf:Description>
+    
+  <rdf:Description rdf:about="#author1Vcard">
+    <rdf:type>
+        <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+    </rdf:type>
+    <vCard:N>
+        <rdf:Description rdf:about="#author1VcardN"/>
+    </vCard:N>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#author1VcardN">
+    <vCard:FN>Alan M. Weinstein</vCard:FN>
+    <vCard:Family>Weinstein</vCard:Family>
+    <vCard:Given>Alan M.</vCard:Given>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#weinstein_1995">
+    <bqmodel:description rdf:resource="#article"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#weinstein_1995">
+    <bqmodel:description rdf:resource="https://www.ncbi.nlm.nih.gov/pubmed/7658195"/>
+    <dcterms:journal>The Journal of General Physiology</dcterms:journal>
+  </rdf:Description>
+    
+  <bibo:Article rdf:ID="article">
+    <dcterms:creator>Alan M. Weinstein</dcterms:creator>
+    <dcterms:issued>1995</dcterms:issued>
+    <dcterms:title>A Kinetically Defined Na +/H + Antiporter within a Mathematical Model of the Rat Proximal Tubule</dcterms:title>
+    <bibo:volume>105</bibo:volume>
+    <bibo:issue>5</bibo:issue>
+    <bibo:pageStart>617</bibo:pageStart>
+    <bibo:pageEnd>641</bibo:pageEnd>
+    <dcterms:PMCID rdf:resource="PMC2216949"/>
+    <dcterms:isPartOf rdf:resource="urn:issn:0000-0000"/>
+    <dcterms:isPartOf rdf:resource="#paper"/>
+  </bibo:Article>
+
+  <bibo:AckInThePaper rdf:ID="paper">
+    <dcterms:publisher rdf:resource="#the_publisher"/>
+    <bibo:ackList>
+        <rdf:Seq>
+            <rdf:li rdf:resource="#Olaf_S_Andersen"/>
+            <rdf:li rdf:resource="#xyz"/>
+        </rdf:Seq>
+    </bibo:ackList>
+    <dcterms:issued>May, 1995</dcterms:issued>
+    <bibo:isbn>000000K</bibo:isbn>
+  </bibo:AckInThePaper>
+
+  <foaf:Organisation rdf:ID="the_publisher" foaf:name="J. GEN. PHYSIOL. The Rockefeller University Press" />
+
+  <foaf:Person rdf:ID="Olaf_S_Andersen" foaf:name="Olaf S. Andersen"/>
+  <foaf:Person rdf:ID="xyz" foaf:name="x y z"/>
+  
+  <rdf:Description rdf:about="#weinstein_1995">
+    <rdf:type>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+    </rdf:type>            
+    <rdf:li>lumen</rdf:li>
+    <rdf:li>cytosol</rdf:li>
+    <rdf:li>cell membrane</rdf:li>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#weinstein_1995">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:70973"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#weinstein_1995">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:17693"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#weinstein_1995">
+    <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#weinstein_1995">
+    <bqmodel:isInstanceOf rdf:resource="http://identifiers.org/uniprot/P26433"/>
+    <dcterms:Protein>Sodium/hydrogen exchanger 3</dcterms:Protein>
+    <dcterms:Gene>Slc9a3</dcterms:Gene>
+    <dcterms:Species>Rattus norvegicus (Rat)</dcterms:Species>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#weinstein_1995">
+    <bqmodel:isDescribedBy rdf:resource="http://identifiers.org/doi/10.1085/jgp.105.5.617"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_int_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_4">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_6">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_5">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:66836" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:49637" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of H+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.beta_ext_H">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/260989008" />
+      <dcterms:description>Normalized concentration ratio of H+ in the etracellular (lumen) compartment (property of a constitutive relation; dimensionless)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.K_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_9">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_11">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_12">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.obolibrary.org/obo/PR_000015214" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of Na+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_int_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_3">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_4">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_5" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of Na+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.gamma_ext_NH4">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/421416008" />
+      <dcterms:description>Normalized concentration ratio of NH4+ in the etracellular (lumen) compartment (property of a constitutive relation; dimensionless)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_23">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_5">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_8">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:63841" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_8">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:74550" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_8">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:66836" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity of NH4+ flow through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity of NH4+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.J_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_28">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_6">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_9">
+                  <semsim:hasPhysicalEntityReference>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_15">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://purl.obolibrary.org/obo/PR_000015214" />
+                    </rdf:Description>
+                  </semsim:hasPhysicalEntityReference>
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_9">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_9">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Na+ flow through Na+/H+ antiporter</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of Na+ transmembrane solute through Na+/H+ antiporter from extracellular (lumen) to intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP0_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_18">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_0">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_3">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_3">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_3">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_0">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_0">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_0">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity constant of Na flow through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of Na+ from extracellular (lumen) to intracellular (cytosol) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_ext_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_0">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_0">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_1">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/fma/FMA:74550" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of Na+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.XTxP0_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_7">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_1">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_4">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_4">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_4">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_1">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_1">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_1">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity constant of H+ flow through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of H+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_int_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_15">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_4" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of Na+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_21">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_3">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_6">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_6">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_6">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity of Na+ flow through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity of Na+ from extracellular (lumen) to intracellular (cytosol) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Bag rdf:about="http://www.cellml.org/cellml/1.1#weinstein_1995">
+      <rdf:li>
+        <bqs:Person rdf:about="http://www.cellml.org/cellml/1.1#author1Vcard">
+          <vCard:N>
+            <rdf:Description rdf:about="http://www.cellml.org/cellml/1.1#author1VcardN">
+              <vCard:FN>Alan M. Weinstein</vCard:FN>
+              <vCard:Family>Weinstein</vCard:Family>
+              <vCard:Given>Alan M.</vCard:Given>
+            </rdf:Description>
+          </vCard:N>
+        </bqs:Person>
+      </rdf:li>
+      <rdf:li>cytosol</rdf:li>
+      <rdf:li>NHE3</rdf:li>
+      <dcterms:Protein>Sodium/hydrogen exchanger 3</dcterms:Protein>
+      <rdf:_1>lumen</rdf:_1>
+      <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:84666" />
+      <rdf:_1>Na+/H+ antiporter</rdf:_1>
+      <rdf:_2>ion transport</rdf:_2>
+      <rdf:_3>cell membrane</rdf:_3>
+      <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:17693" />
+      <dcterms:Species>Rattus norvegicus (Rat)</dcterms:Species>
+      <bqmodel:isInstanceOf rdf:resource="http://identifiers.org/uniprot/P26433" />
+      <dcterms:Gene>Slc9a3</dcterms:Gene>
+      <bqmodel:description>
+        <bibo:Article rdf:about="http://www.cellml.org/cellml/1.1#article">
+          <dcterms:title>A Kinetically Defined Na +/H + Antiporter within a Mathematical Model of the Rat Proximal Tubule</dcterms:title>
+          <bibo:volume>105</bibo:volume>
+          <dcterms:PMCID rdf:resource="http://www.cellml.org/cellml/PMC2216949" />
+          <bibo:issue>5</bibo:issue>
+          <dcterms:creator>Alan M. Weinstein</dcterms:creator>
+          <bibo:pageEnd>641</bibo:pageEnd>
+          <bibo:pageStart>617</bibo:pageStart>
+          <dcterms:issued>1995</dcterms:issued>
+          <dcterms:isPartOf>
+            <bibo:AckInThePaper rdf:about="http://www.cellml.org/cellml/1.1#paper">
+              <dcterms:publisher>
+                <foaf:Organisation rdf:about="http://www.cellml.org/cellml/1.1#the_publisher">
+                  <foaf:name>J. GEN. PHYSIOL. The Rockefeller University Press</foaf:name>
+                </foaf:Organisation>
+              </dcterms:publisher>
+              <bibo:ackList>
+                <rdf:Seq>
+                  <rdf:li>
+                    <foaf:Person rdf:about="http://www.cellml.org/cellml/1.1#Olaf_S_Andersen">
+                      <foaf:name>Olaf S. Andersen</foaf:name>
+                    </foaf:Person>
+                  </rdf:li>
+                  <rdf:li>
+                    <foaf:Person rdf:about="http://www.cellml.org/cellml/1.1#xyz">
+                      <foaf:name>x y z</foaf:name>
+                    </foaf:Person>
+                  </rdf:li>
+                </rdf:Seq>
+              </bibo:ackList>
+              <dcterms:issued>May, 1995</dcterms:issued>
+              <bibo:isbn>000000K</bibo:isbn>
+            </bibo:AckInThePaper>
+          </dcterms:isPartOf>
+          <dcterms:isPartOf rdf:resource="urn:issn:0000-0000" />
+        </bibo:Article>
+      </bqmodel:description>
+      <ro:located_in rdf:resource="http://identifiers.org/fma/FMA:70973" />
+      <dcterms:journal>The Journal of General Physiology</dcterms:journal>
+      <bqmodel:description rdf:resource="https://www.ncbi.nlm.nih.gov/pubmed/7658195" />
+      <dcterms:title>A Kinetically Defined Na +/H + Antiporter within a Mathematical Model of the Rat Proximal Tubule</dcterms:title>
+      <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq" />
+      <bqmodel:isDescribedBy rdf:resource="http://identifiers.org/doi/10.1085/jgp.105.5.617" />
+    </rdf:Bag>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_ext_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_1">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_2">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:49637" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of H+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.J_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_30">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_8">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_11">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_15" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_11">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_11">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>NH4+ flow through Na+/H+ antiporter</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of NH4+ transmembrane solute through Na+/NH4+ antiporter from intracellular (cytosol) to extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#environment.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.beta_int_H">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/260989008" />
+      <dcterms:description>Normalized concentration ratio of H+ in the intracellular (cytosol) compartment (property of a constitutive relation; dimensionless)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.sum_NHE3">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_27">
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.K_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_11">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_14">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_12" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:28938" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of NH4+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.K_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_26">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of NH4+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.gamma_int_NH4">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/421416008" />
+      <dcterms:description>Normalized concentration ratio of NH4+ in the intracellular (cytosol) compartment (property of a constitutive relation; dimensionless)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.K_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_24">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of Na+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.J_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_29">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_7">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_10">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_15" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_10">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_10">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>H+ flow through Na+/H+ antiporter</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Flux of H+ transmembrane solute through Na+/H+ antiporter from intracellular (cytosol) to extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_ext_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_13">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of H+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.XTxP0_NHE3_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_6">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of Na+ from extracellular (lumen) to intracellular (cytosol) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_int_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_17">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_7">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_5" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:28938" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of NH4+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_int_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_5">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_7" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of NH4+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#Concentrations.C_ext_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_2">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_3">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_1" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:28938" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of NH4+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.alpha_ext_Na">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/263660008" />
+      <dcterms:description>Normalized concentration ratio of Na+ in the etracellular (lumen) compartment (property of a constitutive relation; dimensionless )</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_ext_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_14">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_3" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of NH4+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_int_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_16">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of H+ in the intracellular (cytosol) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.K_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_25">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_13">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_12" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:49637" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of H+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.XTxP0_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_8">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_2">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_5">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_5">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_5">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_2">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_2">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_2">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity constant of NH4+ through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of NH4+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.alpha_int_Na">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/263660008" />
+      <dcterms:description>Normalized concentration ratio of Na+ in the intracellular (cytosol) compartment (property of a constitutive relation; dimensionless)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3_Parameters.K_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_10">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Equilibrium binding contstant of H+ in the NHE3 protein model</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.C_ext_Na">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_12">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Concentration of Na+ in the extracellular (lumen) compartment</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP0_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_19">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_1" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of H+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP_NHE3_H">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_22">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_4">
+              <semsim:hasMediatorParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#mediator_7">
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_10" />
+                </rdf:Description>
+              </semsim:hasMediatorParticipant>
+              <semsim:hasSinkParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#sink_7">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_8" />
+                </rdf:Description>
+              </semsim:hasSinkParticipant>
+              <semsim:hasSourceParticipant>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#source_7">
+                  <semsim:hasMultiplier>1.0</semsim:hasMultiplier>
+                  <semsim:hasPhysicalEntityReference rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#entity_9" />
+                </rdf:Description>
+              </semsim:hasSourceParticipant>
+              <dcterms:description />
+              <semsim:name>Permeation velocity of H+ flow through cell membrane</semsim:name>
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity of H+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#NHE3.XTxP0_NHE3_NH4">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#property_20">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/12102016180057481p1300#process_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00593" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>Permeation velocity constant of NH4+ from intracellular (cytosol) to extracellular (lumen) compartment through the cell membrane</dcterms:description>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+

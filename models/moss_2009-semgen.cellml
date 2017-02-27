@@ -1,0 +1,2092 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" name="moss_2009" cmeta:id="moss_2009">
+  <documentation xmlns="http://cellml.org/tmp-documentation">
+    <article>
+      <section id="sec_status">
+        <title>Model Status</title>
+        <para>This CellML model cannot be opened in COR and it cannot be run in PCEnv due to the use of vectors - something which may be included in the CellML 1.2 specification.  The way this model is written it is not ideally suited for expression in CellML.  However, we have attempted to describe the model in CellML with the hope that in the future it may be further validated and curated.</para>
+      </section>
+      <sect1 id="sec_structure">
+        <title>Model Structure</title>
+        <para>ABSTRACT: In this paper, concepts from network automata are adapted and extended to model complex biological systems. Specifically, systems of nephrons, the operational units of the kidney, are modelled and the dynamics of such systems are explored. Nephron behaviour can fluctuate widely and, under certain conditions, become chaotic. However, the behaviour of the whole kidney remains remarkably stable and blood solute levels are maintained under a wide range of conditions even when many nephrons are damaged or lost. A network model is used to investigate the stability of systems of nephrons and interactions between nephrons. More sophisticated dynamics are explored including the observed oscillations in single nephron filtration rates and the development of stable ionic and osmotic gradients in the inner medulla which contribute to the countercurrent exchange mechanism. We have used the model to explore the effects of changes in input parameters including hydrostatic and osmotic pressures and concentrations of ions, such as sodium and chloride. The intrinsic nephron control, tubuloglomerular feedback, is included and the effects of coupling between nephrons are explored in two-, eight- and 72-nephron models.</para>
+        <para>The original paper reference is cited below:</para>
+        <para>
+          A computational model for emergent dynamics in the kidney, Moss R, Kazmierczak E, Kirley M, and Harris P, 2009,
+          <emphasis>Philosophical Transactions of the Royal Society A</emphasis>
+          , 367, 2125-40.
+          <ulink url="http://www.ncbi.nlm.nih.gov/pubmed/19414449">PubMed ID: 19414449</ulink>
+        </para>
+        <informalfigure float="0" id="fig_reaction_diagram">
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="moss_2009.png" />
+            </imageobject>
+          </mediaobject>
+          <caption>Schematic diagram representing the model for the single-nephron tubule as a network automata, showing the edges that capture fluid flow, solute transport and tubulo-glomerular feedback.</caption>
+        </informalfigure>
+      </sect1>
+    </article>
+  </documentation>
+  <units name="millimolar">
+    <unit prefix="milli" units="mole" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="nanoL_per_minute_cm">
+    <unit prefix="nano" units="litre" />
+    <unit exponent="-1.0" units="minute" />
+    <unit exponent="-1.0" prefix="centi" units="metre" />
+  </units>
+  <units name="mmHg_L_per_gram">
+    <unit units="litre" />
+    <unit exponent="-1.0" units="gram" />
+    <unit units="mmHg" />
+  </units>
+  <units name="nanoL_per_minute">
+    <unit exponent="-1.0" units="minute" />
+    <unit prefix="nano" units="litre" />
+  </units>
+  <units name="mmHg_minute_per_nanoL">
+    <unit units="minute" />
+    <unit units="mmHg" />
+    <unit exponent="-1.0" prefix="nano" units="litre" />
+  </units>
+  <units name="radian_per_second">
+    <unit exponent="-1.0" units="second" />
+    <unit units="radian" />
+  </units>
+  <units name="mmHg">
+    <unit units="pascal" />
+  </units>
+  <units name="mmHg_L2_per_gram2">
+    <unit exponent="2.0" units="litre" />
+    <unit exponent="-2.0" units="gram" />
+    <unit units="mmHg" />
+  </units>
+  <units name="g_per_L">
+    <unit units="gram" />
+    <unit exponent="-1.0" units="litre" />
+  </units>
+  <units name="minute">
+    <unit units="second" />
+  </units>
+  <units name="nanoL_per_minute_mmHg">
+    <unit prefix="nano" units="litre" />
+    <unit exponent="-1.0" units="minute" />
+    <unit exponent="-1.0" units="mmHg" />
+  </units>
+  <component name="environment">
+    <variable name="time" public_interface="out" units="minute" />
+  </component>
+  <component name="model_parameters">
+    <variable initial_value="57.0" name="C_A" public_interface="out" units="g_per_L" />
+    <variable initial_value="5.8" name="C_E" public_interface="out" units="g_per_L" />
+    <variable name="t" public_interface="out" units="minute" />
+    <variable name="delta_t" public_interface="out" units="minute" />
+    <variable name="time" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0.1">
+      <ci type="integer">t</ci>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0.2">
+      <apply>
+        <eq />
+        <ci>t</ci>
+        <ci>time</ci>
+      </apply>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="0.3">
+      <apply>
+        <eq />
+        <ci>delta_t</ci>
+        <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="minute">1.0</cn>
+      </apply>
+    </math>
+  </component>
+  <component name="R_A" cmeta:id="R_A">
+    <variable name="R_A" public_interface="out" units="mmHg_minute_per_nanoL" />
+    <variable initial_value="0.5" name="H_A" units="dimensionless" />
+    <variable initial_value="3.3" name="gamma" units="dimensionless" />
+    <variable name="epsilon" public_interface="in" units="mmHg_minute_per_nanoL" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="1">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">R_A</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <selector />
+            <ci type="vector">epsilon</ci>
+            <ci>t</ci>
+          </apply>
+          <apply>
+            <exp />
+            <apply>
+              <times />
+              <ci>gamma</ci>
+              <ci>H_A</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="P_G" cmeta:id="P_G">
+    <variable name="P_G" public_interface="out" units="mmHg" />
+    <variable initial_value="108.5" name="P_A" units="mmHg" />
+    <variable initial_value="5.0" name="P_V" units="mmHg" />
+    <variable initial_value="0.0298" name="R_E" units="mmHg_minute_per_nanoL" />
+    <variable name="C_A" public_interface="in" units="g_per_L" />
+    <variable name="C_E" public_interface="in" units="g_per_L" />
+    <variable name="R_A" public_interface="in" units="mmHg_minute_per_nanoL" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="2">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">P_G</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <plus />
+            <ci>P_V</ci>
+            <apply>
+              <times />
+              <ci>P_A</ci>
+              <apply>
+                <divide />
+                <apply>
+                  <selector />
+                  <ci type="vector">R_E</ci>
+                  <ci>t</ci>
+                </apply>
+                <apply>
+                  <selector />
+                  <ci type="vector">R_A</ci>
+                  <ci>t</ci>
+                </apply>
+              </apply>
+              <apply>
+                <divide />
+                <apply>
+                  <selector />
+                  <ci type="vector">C_A</ci>
+                  <ci>t</ci>
+                </apply>
+                <apply>
+                  <selector />
+                  <ci type="vector">C_E</ci>
+                  <ci>t</ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <times />
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <divide />
+                <apply>
+                  <selector />
+                  <ci type="vector">R_E</ci>
+                  <ci>t</ci>
+                </apply>
+                <apply>
+                  <selector />
+                  <ci type="vector">R_A</ci>
+                  <ci>t</ci>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <selector />
+                <ci type="vector">C_A</ci>
+                <ci>t</ci>
+              </apply>
+              <apply>
+                <selector />
+                <ci type="vector">C_E</ci>
+                <ci>t</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="phi" cmeta:id="phi">
+    <variable name="phi" public_interface="out" units="dimensionless" />
+    <variable initial_value="0.057" name="epsilon_max" units="mmHg_minute_per_nanoL" />
+    <variable initial_value="0.02" name="psi" units="mmHg_minute_per_nanoL" />
+    <variable initial_value="33.6" name="kappa" units="nanoL_per_minute_cm" />
+    <variable initial_value="0.1" name="D_TGF" units="minute" />
+    <variable initial_value="44.0" name="Na_half" units="millimolar" />
+    <variable name="Na_M" public_interface="in" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="3">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">phi</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <minus />
+          <ci>epsilon_max</ci>
+          <apply>
+            <divide />
+            <ci>psi</ci>
+            <apply>
+              <plus />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <exp />
+                <apply>
+                  <minus />
+                  <apply>
+                    <times />
+                    <ci>kappa</ci>
+                    <apply>
+                      <selector />
+                      <ci type="vector">Na_M</ci>
+                      <apply>
+                        <minus />
+                        <ci>t</ci>
+                        <ci>D_TGF</ci>
+                      </apply>
+                    </apply>
+                  </apply>
+                  <ci>Na_half</ci>
+                </apply>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="epsilon" cmeta:id="epsilon">
+    <variable name="epsilon" public_interface="out" units="mmHg_minute_per_nanoL" />
+    <variable initial_value="0.2" name="omega" units="radian_per_second" />
+    <variable initial_value="1" name="delta" units="dimensionless" />
+    <variable initial_value="0.9" name="zeta" units="dimensionless" />
+    <variable name="phi" public_interface="in" units="dimensionless" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="4">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">epsilon</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <minus />
+            <apply>
+              <plus />
+              <apply>
+                <selector />
+                <ci type="vector">phi</ci>
+                <ci>t</ci>
+              </apply>
+              <apply>
+                <times />
+                <apply>
+                  <selector />
+                  <ci type="vector">epsilon</ci>
+                  <ci>t</ci>
+                </apply>
+                <apply>
+                  <plus />
+                  <apply>
+                    <divide />
+                    <apply>
+                      <times />
+                      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                      <ci>zeta</ci>
+                    </apply>
+                    <apply>
+                      <times />
+                      <ci>omega</ci>
+                      <ci>delta</ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <divide />
+                    <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                    <apply>
+                      <power />
+                      <apply>
+                        <times />
+                        <ci>omega</ci>
+                        <ci>delta</ci>
+                      </apply>
+                      <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <apply>
+                  <selector />
+                  <ci type="vector">epsilon</ci>
+                  <apply>
+                    <minus />
+                    <ci>t</ci>
+                    <ci>delta</ci>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <power />
+                <apply>
+                  <times />
+                  <ci>omega</ci>
+                  <ci>delta</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <plus />
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+            <apply>
+              <divide />
+              <apply>
+                <times />
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+                <ci>zeta</ci>
+              </apply>
+              <apply>
+                <times />
+                <ci>omega</ci>
+                <ci>delta</ci>
+              </apply>
+            </apply>
+            <apply>
+              <divide />
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">1.0</cn>
+              <apply>
+                <power />
+                <apply>
+                  <times />
+                  <ci>omega</ci>
+                  <ci>delta</ci>
+                </apply>
+                <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="pi_G" cmeta:id="pi_G">
+    <variable name="pi_G" public_interface="out" units="mmHg" />
+    <variable name="pi" public_interface="in" units="mmHg" />
+    <variable name="C_A" public_interface="in" units="g_per_L" />
+    <variable name="C_E" public_interface="in" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="5">
+      <apply>
+        <eq />
+        <ci>pi_G</ci>
+        <apply>
+          <times />
+          <ci>pi</ci>
+          <apply>
+            <divide />
+            <apply>
+              <plus />
+              <ci>C_A</ci>
+              <ci>C_E</ci>
+            </apply>
+            <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="g_per_L">2.0</cn>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="pi" cmeta:id="pi">
+    <variable name="pi" public_interface="out" units="mmHg" />
+    <variable initial_value="0.1631" name="a" units="mmHg_L_per_gram" />
+    <variable initial_value="0.00294" name="b" units="mmHg_L2_per_gram2" />
+    <variable initial_value="58.0" name="C" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="6">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">pi</ci>
+          <ci>C</ci>
+        </apply>
+        <apply>
+          <plus />
+          <apply>
+            <times />
+            <ci>a</ci>
+            <ci>C</ci>
+          </apply>
+          <apply>
+            <times />
+            <ci>b</ci>
+            <apply>
+              <power />
+              <ci>C</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="SNGFR" cmeta:id="SNGFR">
+    <variable name="SNGFR" public_interface="out" units="nanoL_per_minute" />
+    <variable initial_value="2.5" name="Kf" units="nanoL_per_minute_mmHg" />
+    <variable initial_value="1.0" name="P_BC" units="mmHg" />
+    <variable name="P_G" public_interface="in" units="mmHg" />
+    <variable name="pi_G" public_interface="in" units="mmHg" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="7">
+      <apply>
+        <eq />
+        <ci>SNGFR</ci>
+        <apply>
+          <times />
+          <ci>Kf</ci>
+          <apply>
+            <minus />
+            <ci>P_G</ci>
+            <apply>
+              <plus />
+              <ci>P_BC</ci>
+              <ci>pi_G</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_I" cmeta:id="Na_I">
+    <variable name="Na_I" public_interface="out" units="g_per_L" />
+    <variable name="Na_R" public_interface="in" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="8">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">Na_I</ci>
+          <ci>t</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <selector />
+            <ci type="vector">Na_R</ci>
+            <ci>t</ci>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.67</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_I" cmeta:id="H2O_I">
+    <variable name="H2O_I" public_interface="out" units="dimensionless" />
+    <variable name="H2O_R" public_interface="in" units="dimensionless" />
+    <variable name="t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="9">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">H2O_I</ci>
+          <ci>t</ci>
+        </apply>
+        <apply>
+          <divide />
+          <apply>
+            <selector />
+            <ci type="vector">H2O_R</ci>
+            <ci>t</ci>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">0.67</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_D_M" cmeta:id="H2O_D_M">
+    <variable name="H2O_D_M" public_interface="out" units="dimensionless" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="10">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">H2O_D_M</ci>
+          <ci>t</ci>
+        </apply>
+        <apply>
+          <selector />
+          <ci type="vector">H2O_D_M</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_D_M" cmeta:id="Na_D_M">
+    <variable name="Na_D_M" public_interface="out" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="11">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">Na_D_M</ci>
+          <ci>t</ci>
+        </apply>
+        <apply>
+          <selector />
+          <ci type="vector">Na_D_M</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_D" cmeta:id="Na_D">
+    <variable name="Na_D" public_interface="out" units="g_per_L" />
+    <variable name="H2O_D" public_interface="in" units="dimensionless" />
+    <variable name="H2O_M" public_interface="in" units="dimensionless" />
+    <variable name="Na_M" public_interface="in" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">Na_D</ci>
+          <ci>t</ci>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <selector />
+              <ci type="vector">Na_M</ci>
+              <ci>t</ci>
+            </apply>
+            <apply>
+              <selector />
+              <ci type="vector">H2O_M</ci>
+              <apply>
+                <plus />
+                <ci>t</ci>
+                <ci>delta_t</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <selector />
+            <ci type="vector">H2O_D</ci>
+            <apply>
+              <plus />
+              <ci>t</ci>
+              <ci>delta_t</ci>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_M" cmeta:id="Na_M">
+    <variable name="Na_M" public_interface="out" units="g_per_L" />
+    <variable name="H2O_M" public_interface="in" units="dimensionless" />
+    <variable name="H2O_A" public_interface="in" units="dimensionless" />
+    <variable name="Na_G" public_interface="in" units="g_per_L" />
+    <variable name="Na_A" public_interface="in" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="12a">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">Na_M</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <selector />
+            <ci type="vector">H2O_M</ci>
+            <ci>t</ci>
+          </apply>
+          <apply>
+            <plus />
+            <apply>
+              <divide />
+              <apply>
+                <selector />
+                <ci type="vector">Na_A</ci>
+                <apply>
+                  <plus />
+                  <ci>t</ci>
+                  <ci>delta_t</ci>
+                </apply>
+              </apply>
+              <apply>
+                <selector />
+                <ci type="vector">H2O_A</ci>
+                <ci>t</ci>
+              </apply>
+            </apply>
+            <ci>Na_G</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_D" cmeta:id="H2O_D">
+    <variable name="H2O_D" public_interface="out" units="dimensionless" />
+    <variable name="Na_D" public_interface="in" units="g_per_L" />
+    <variable name="Na_D_M" public_interface="in" units="g_per_L" />
+    <variable name="H2O_D_M" public_interface="in" units="dimensionless" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="13">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">H2O_D</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <selector />
+              <ci type="vector">Na_D</ci>
+              <ci>t</ci>
+            </apply>
+            <apply>
+              <selector />
+              <ci type="vector">Na_D_M</ci>
+              <ci>t</ci>
+            </apply>
+          </apply>
+          <apply>
+            <selector />
+            <ci type="vector">H2O_D_M</ci>
+            <ci>t</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_M" cmeta:id="H2O_M">
+    <variable name="H2O_M" public_interface="out" units="dimensionless" />
+    <variable name="Na_M" public_interface="in" units="g_per_L" />
+    <variable name="Na_D_M" public_interface="in" units="g_per_L" />
+    <variable name="H2O_D_M" public_interface="in" units="dimensionless" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="14">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">H2O_M</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <selector />
+              <ci type="vector">Na_M</ci>
+              <ci>t</ci>
+            </apply>
+            <apply>
+              <selector />
+              <ci type="vector">Na_D_M</ci>
+              <ci>t</ci>
+            </apply>
+          </apply>
+          <apply>
+            <selector />
+            <ci type="vector">H2O_D_M</ci>
+            <ci>t</ci>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_A" cmeta:id="Na_A">
+    <variable name="Na_A" public_interface="out" units="g_per_L" />
+    <variable name="H2O_A" public_interface="in" units="dimensionless" />
+    <variable name="H2O_M" public_interface="in" units="dimensionless" />
+    <variable name="H2O_M_A" public_interface="in" units="dimensionless" />
+    <variable name="Na_M_A" public_interface="in" units="g_per_L" />
+    <variable name="Na_G" public_interface="in" units="g_per_L" />
+    <variable name="t" public_interface="in" units="minute" />
+    <variable name="delta_t" public_interface="in" units="minute" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15">
+      <apply>
+        <eq />
+        <apply>
+          <selector />
+          <ci type="vector">Na_A</ci>
+          <apply>
+            <plus />
+            <ci>t</ci>
+            <ci>delta_t</ci>
+          </apply>
+        </apply>
+        <apply>
+          <times />
+          <apply>
+            <divide />
+            <apply>
+              <selector />
+              <ci type="vector">H2O_A</ci>
+              <ci>t</ci>
+            </apply>
+            <apply>
+              <selector />
+              <ci type="vector">H2O_M_A</ci>
+              <apply>
+                <plus />
+                <ci>t</ci>
+                <ci>delta_t</ci>
+              </apply>
+            </apply>
+          </apply>
+          <apply>
+            <minus />
+            <apply>
+              <selector />
+              <ci type="vector">Na_M_A</ci>
+              <ci>t</ci>
+            </apply>
+            <apply>
+              <times />
+              <apply>
+                <selector />
+                <ci type="vector">Na_G</ci>
+                <ci>t</ci>
+              </apply>
+              <apply>
+                <selector />
+                <ci type="vector">H2O_M</ci>
+                <ci>t</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_G" cmeta:id="Na_G">
+    <variable name="Na_G" public_interface="out" units="g_per_L" />
+    <variable name="Na_M" public_interface="in" units="g_per_L" />
+    <variable name="Na_A" public_interface="in" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15a">
+      <apply>
+        <eq />
+        <ci>Na_G</ci>
+        <apply>
+          <minus />
+          <ci>Na_M</ci>
+          <ci>Na_A</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_A" cmeta:id="H2O_A">
+    <variable initial_value="100.0" name="H2O_A" public_interface="out" units="dimensionless" />
+  </component>
+  <component name="H2O_I_IF" cmeta:id="H2O_I_IF">
+    <variable initial_value="100.0" name="H2O_I_IF" public_interface="out" units="dimensionless" />
+  </component>
+  <component name="Na_I_IF" cmeta:id="Na_I_IF">
+    <variable initial_value="100.0" name="Na_I_IF" public_interface="out" units="g_per_L" />
+  </component>
+  <component name="Na_M_A" cmeta:id="Na_M_A">
+    <variable name="Na_M_A" public_interface="out" units="g_per_L" />
+    <variable name="Na_M" public_interface="in" units="g_per_L" />
+    <variable name="Na_A" public_interface="in" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15b">
+      <apply>
+        <eq />
+        <ci>Na_M_A</ci>
+        <apply>
+          <plus />
+          <ci>Na_M</ci>
+          <ci>Na_A</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_M_A" cmeta:id="H2O_M_A">
+    <variable name="H2O_M_A" public_interface="out" units="dimensionless" />
+    <variable name="H2O_M" public_interface="in" units="dimensionless" />
+    <variable name="H2O_A" public_interface="in" units="dimensionless" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="15c">
+      <apply>
+        <eq />
+        <ci>H2O_M_A</ci>
+        <apply>
+          <plus />
+          <ci>H2O_M</ci>
+          <ci>H2O_A</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="R_ADH" cmeta:id="R_ADH">
+    <variable name="R_ADH" public_interface="out" units="g_per_L" />
+    <variable initial_value="100.0" name="ADH_I" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="16">
+      <apply>
+        <eq />
+        <ci>R_ADH</ci>
+        <apply>
+          <divide />
+          <apply>
+            <log />
+            <apply>
+              <times />
+              <ci>ADH_I</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="dimensionless">
+                1
+                <sep />
+                12
+              </cn>
+            </apply>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">2.0</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="R_ALD" cmeta:id="R_ALD">
+    <variable name="R_ALD" public_interface="out" units="g_per_L" />
+    <variable initial_value="100.0" name="ALD_I" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="17">
+      <apply>
+        <eq />
+        <ci>R_ALD</ci>
+        <apply>
+          <divide />
+          <apply>
+            <log />
+            <apply>
+              <times />
+              <ci>ALD_I</ci>
+              <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" type="e-notation" cellml:units="dimensionless">
+                1
+                <sep />
+                11
+              </cn>
+            </apply>
+          </apply>
+          <cn xmlns:cellml="http://www.cellml.org/cellml/1.0#" cellml:units="dimensionless">3.0</cn>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="H2O_R" cmeta:id="H2O_R">
+    <variable name="H2O_R" public_interface="out" units="dimensionless" />
+    <variable name="R_ADH" public_interface="in" units="g_per_L" />
+    <variable name="H2O_I" public_interface="in" units="dimensionless" />
+    <variable name="H2O_I_IF" public_interface="in" units="dimensionless" />
+    <variable name="Na_I" public_interface="in" units="g_per_L" />
+    <variable name="Na_I_IF" public_interface="in" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="18">
+      <apply>
+        <eq />
+        <ci>H2O_R</ci>
+        <apply>
+          <times />
+          <ci>R_ADH</ci>
+          <apply>
+            <minus />
+            <ci>H2O_I</ci>
+            <apply>
+              <times />
+              <ci>Na_I</ci>
+              <apply>
+                <divide />
+                <ci>H2O_I_IF</ci>
+                <ci>Na_I_IF</ci>
+              </apply>
+            </apply>
+          </apply>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <component name="Na_R" cmeta:id="Na_R">
+    <variable name="Na_R" public_interface="out" units="g_per_L" />
+    <variable initial_value="100.0" name="Na_max" units="g_per_L" />
+    <variable name="R_ALD" public_interface="in" units="g_per_L" />
+    <variable name="Na_I" public_interface="in" units="g_per_L" />
+    <math xmlns="http://www.w3.org/1998/Math/MathML" id="19">
+      <apply>
+        <eq />
+        <ci>Na_R</ci>
+        <apply>
+          <times />
+          <ci>R_ALD</ci>
+          <ci>Na_max</ci>
+          <ci>Na_I</ci>
+        </apply>
+      </apply>
+    </math>
+  </component>
+  <connection>
+    <map_components component_1="R_ADH" component_2="H2O_R" />
+    <map_variables variable_1="R_ADH" variable_2="R_ADH" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Na_M" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_A" component_2="Na_M" />
+    <map_variables variable_1="H2O_A" variable_2="H2O_A" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_G" component_2="Na_M" />
+    <map_variables variable_1="Na_G" variable_2="Na_G" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_I" component_2="H2O_R" />
+    <map_variables variable_1="H2O_I" variable_2="H2O_I" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="P_G" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+    <map_variables variable_1="C_A" variable_2="C_A" />
+    <map_variables variable_1="C_E" variable_2="C_E" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Na_A" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="H2O_I" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="pi_G" component_2="SNGFR" />
+    <map_variables variable_1="pi_G" variable_2="pi_G" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M_A" component_2="Na_A" />
+    <map_variables variable_1="Na_M_A" variable_2="Na_M_A" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="H2O_D" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_D" component_2="Na_D" />
+    <map_variables variable_1="H2O_D" variable_2="H2O_D" />
+  </connection>
+  <connection>
+    <map_components component_1="epsilon" component_2="R_A" />
+    <map_variables variable_1="epsilon" variable_2="epsilon" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_M" component_2="Na_A" />
+    <map_variables variable_1="H2O_M" variable_2="H2O_M" />
+  </connection>
+  <connection>
+    <map_components component_1="pi" component_2="pi_G" />
+    <map_variables variable_1="pi" variable_2="pi" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_I_IF" component_2="H2O_R" />
+    <map_variables variable_1="Na_I_IF" variable_2="Na_I_IF" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_A" component_2="Na_M_A" />
+    <map_variables variable_1="Na_A" variable_2="Na_A" />
+  </connection>
+  <connection>
+    <map_components component_1="R_ALD" component_2="Na_R" />
+    <map_variables variable_1="R_ALD" variable_2="R_ALD" />
+  </connection>
+  <connection>
+    <map_components component_1="environment" component_2="model_parameters" />
+    <map_variables variable_1="time" variable_2="time" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="H2O_M" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_M" component_2="Na_D" />
+    <map_variables variable_1="H2O_M" variable_2="H2O_M" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_M_A" component_2="Na_A" />
+    <map_variables variable_1="H2O_M_A" variable_2="H2O_M_A" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="pi_G" />
+    <map_variables variable_1="C_A" variable_2="C_A" />
+    <map_variables variable_1="C_E" variable_2="C_E" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_I_IF" component_2="H2O_R" />
+    <map_variables variable_1="H2O_I_IF" variable_2="H2O_I_IF" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="phi" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="P_G" component_2="SNGFR" />
+    <map_variables variable_1="P_G" variable_2="P_G" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M" component_2="Na_G" />
+    <map_variables variable_1="Na_M" variable_2="Na_M" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_M" component_2="H2O_M_A" />
+    <map_variables variable_1="H2O_M" variable_2="H2O_M" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Na_I" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_M" component_2="Na_M" />
+    <map_variables variable_1="H2O_M" variable_2="H2O_M" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Na_D" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="epsilon" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_I" component_2="Na_R" />
+    <map_variables variable_1="Na_I" variable_2="Na_I" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_R" component_2="H2O_I" />
+    <map_variables variable_1="H2O_R" variable_2="H2O_R" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="Na_D_M" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_A" component_2="Na_A" />
+    <map_variables variable_1="H2O_A" variable_2="H2O_A" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="H2O_D_M" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M" component_2="phi" />
+    <map_variables variable_1="Na_M" variable_2="Na_M" />
+  </connection>
+  <connection>
+    <map_components component_1="R_A" component_2="P_G" />
+    <map_variables variable_1="R_A" variable_2="R_A" />
+  </connection>
+  <connection>
+    <map_components component_1="phi" component_2="epsilon" />
+    <map_variables variable_1="phi" variable_2="phi" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_D_M" component_2="H2O_M" />
+    <map_variables variable_1="H2O_D_M" variable_2="H2O_D_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_G" component_2="Na_A" />
+    <map_variables variable_1="Na_G" variable_2="Na_G" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M" component_2="Na_M_A" />
+    <map_variables variable_1="Na_M" variable_2="Na_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_A" component_2="Na_G" />
+    <map_variables variable_1="Na_A" variable_2="Na_A" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_D" component_2="H2O_D" />
+    <map_variables variable_1="Na_D" variable_2="Na_D" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M" component_2="Na_D" />
+    <map_variables variable_1="Na_M" variable_2="Na_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_D_M" component_2="H2O_M" />
+    <map_variables variable_1="Na_D_M" variable_2="Na_D_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_I" component_2="H2O_R" />
+    <map_variables variable_1="Na_I" variable_2="Na_I" />
+  </connection>
+  <connection>
+    <map_components component_1="model_parameters" component_2="R_A" />
+    <map_variables variable_1="delta_t" variable_2="delta_t" />
+    <map_variables variable_1="t" variable_2="t" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_D_M" component_2="H2O_D" />
+    <map_variables variable_1="H2O_D_M" variable_2="H2O_D_M" />
+  </connection>
+  <connection>
+    <map_components component_1="H2O_A" component_2="H2O_M_A" />
+    <map_variables variable_1="H2O_A" variable_2="H2O_A" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_M" component_2="H2O_M" />
+    <map_variables variable_1="Na_M" variable_2="Na_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_A" component_2="Na_M" />
+    <map_variables variable_1="Na_A" variable_2="Na_A" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_D_M" component_2="H2O_D" />
+    <map_variables variable_1="Na_D_M" variable_2="Na_D_M" />
+  </connection>
+  <connection>
+    <map_components component_1="Na_R" component_2="Na_I" />
+    <map_variables variable_1="Na_R" variable_2="Na_R" />
+  </connection>
+  <rdf:RDF xmlns:bqmodel="http://biomodels.net/model-qualifiers/" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:model="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#" xmlns:semsim="http://www.bhi.washington.edu/SemSim#" xmlns:ro="http://www.obofoundry.org/ro/ro.owl#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cellml="http://www.cellml.org/cellml/1.0#" xmlns:bibo="http://purl.org/ontology/bibo/" xmlns:opb="http://bhi.washington.edu/OPB#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:bqs="http://www.cellml.org/bqs/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#">
+
+  <rdf:Description rdf:about="#moss_2009">
+    <dcterms:title>A computational model for emergent dynamics in the kidney</dcterms:title> 
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="#moss_2009">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+        </rdf:type>
+        <rdf:li>nephron</rdf:li>
+        <rdf:li>network model</rdf:li>
+        <rdf:li>computational kidney model</rdf:li>
+        <rdf:li>nonlinear dynamical systems</rdf:li>
+        <rdf:li>nephron</rdf:li>
+        <rdf:li>emergent dynamics</rdf:li>
+  </rdf:Description>
+  
+    <rdf:Description rdf:about="#moss_2009">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+        </rdf:type>
+        <rdf:li>
+            <rdf:Description rdf:about="#author1Vcard"/>
+        </rdf:li>
+        <rdf:li>
+            <rdf:Description rdf:about="#author2Vcard"/>
+        </rdf:li>
+        <rdf:li>
+            <rdf:Description rdf:about="#author3Vcard"/>
+        </rdf:li>
+        <rdf:li>
+            <rdf:Description rdf:about="#author4Vcard"/>
+        </rdf:li>
+    </rdf:Description>   
+
+    <rdf:Description rdf:about="#author1Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author1VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#author2Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author2VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#author3Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author3VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#author4Vcard">
+        <rdf:type>
+            <rdf:Description rdf:about="http://www.cellml.org/bqs/1.0#Person"/>
+        </rdf:type>
+        <vCard:N>
+            <rdf:Description rdf:about="#author4VcardN"/>
+        </vCard:N>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="#author1VcardN">
+        <vCard:FN>ROBERT MOSS</vCard:FN>
+        <vCard:Family>MOSS</vCard:Family>
+        <vCard:Given>ROBERT</vCard:Given>
+    </rdf:Description>   
+    
+    <rdf:Description rdf:about="#author2VcardN">
+        <vCard:FN>ED KAZMIERCZAK</vCard:FN>
+        <vCard:Family>KAZMIERCZAK</vCard:Family>
+        <vCard:Given>ED</vCard:Given>
+    </rdf:Description>   
+
+    <rdf:Description rdf:about="#author3VcardN">
+        <vCard:FN>MICHAEL KIRLEY</vCard:FN>
+        <vCard:Family>KIRLEY</vCard:Family>
+        <vCard:Given>MICHAEL</vCard:Given>
+    </rdf:Description>   
+
+    <rdf:Description rdf:about="#author4VcardN">
+        <vCard:FN>PETER HARRIS</vCard:FN>
+        <vCard:Family>HARRIS</vCard:Family>
+        <vCard:Given>PETER</vCard:Given>
+    </rdf:Description>   
+    
+  <rdf:Description rdf:about="#moss_2009">
+    <bqmodel:description rdf:resource="#article"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#moss_2009">
+    <bqmodel:description rdf:resource="https://www.ncbi.nlm.nih.gov/pubmed/19414449"/>
+    <dcterms:journal>Philosophical Transactions of the Royal Society</dcterms:journal>
+  </rdf:Description>
+  
+  <bibo:Article rdf:ID="article">
+    <dcterms:creator>ROBERT MOSS, ED KAZMIERCZAK, MICHAEL KIRLEY and PETER HARRIS</dcterms:creator>
+    <dcterms:issued>2009</dcterms:issued>
+    <dcterms:title>A computational model for emergent dynamics in the kidney</dcterms:title>
+    <bibo:volume>367</bibo:volume>
+    <bibo:issue>1896</bibo:issue>
+    <bibo:pageStart>2125</bibo:pageStart>
+    <bibo:pageEnd>2140</bibo:pageEnd>
+    <dcterms:PMCID rdf:resource="19414449"/>
+    <dcterms:isPartOf rdf:resource="urn:issn:0000-0000"/>
+    <dcterms:isPartOf rdf:resource="#paper"/>
+  </bibo:Article>
+
+  <bibo:AckInThePaper rdf:ID="paper">
+    <dcterms:publisher rdf:resource="#the_publisher"/>
+    <bibo:ackList>
+        <rdf:Seq>
+            <rdf:li rdf:resource="#Donald_Marsh"/>
+            <rdf:li rdf:resource="#Randy_Thomas"/>
+        </rdf:Seq>
+    </bibo:ackList>
+    <dcterms:issued>May, 2009</dcterms:issued>
+    <bibo:isbn>000000K</bibo:isbn>
+  </bibo:AckInThePaper>
+
+  <foaf:Organisation rdf:ID="the_publisher" foaf:name="Philosophical Transactions of the Royal Society" />
+
+  <foaf:Person rdf:ID="Donald_Marsh" foaf:name="Donald Marsh"/>
+  <foaf:Person rdf:ID="Randy_Thomas" foaf:name="Randy Thomas"/>
+   
+  <rdf:Description rdf:about="#moss_2009">
+    <bqmodel:isDescribedBy rdf:resource="http://identifiers.org/doi/10.1098/rsta.2008.0313"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#moss_2009">
+    <bqmodel:isDescribedBy rdf:resource="http://identifiers.org/doi/10.1098/rsta.2008.0313"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="#moss_2009">
+    <bqmodel:isDescribedBy rdf:resource="http://identifiers.org/doi/10.1098/rsta.2008.0313"/>
+  </rdf:Description>
+  
+  <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_D.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_17">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_7">
+                  <ro:part_of>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_8">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17698" />
+                    </rdf:Description>
+                  </ro:part_of>
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma9673" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_6">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_I.H2O_I">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_11">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_13">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_12">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17693" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water filtrate in the proximal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_D.Na_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_25">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_17">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_15">
+                  <ro:part_of>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_16">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma9673" />
+                    </rdf:Description>
+                  </ro:part_of>
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17705" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#model_parameters.C_E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_1">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_2">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_3">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma77043" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma66843" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (bloood pasma) in the efferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.P_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_2">
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00509" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>arterial pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#pi_G.C_E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_8">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (bloood pasma) in the efferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M_A.Na_M_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_41">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_25">
+                  <ro:part_of>
+                    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_23">
+                      <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17717" />
+                    </rdf:Description>
+                  </ro:part_of>
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma9673" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_R.Na_I">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_51">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_11">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_12" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium filtrate in the proximal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M_A.H2O_M_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_44">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_27">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_25" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#epsilon.phi">
+      <dcterms:description>tubuloglomerular feedback signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_D_M.H2O_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_12">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_14">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_15" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water conservation (quantity) in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M_A.H2O_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_45">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_7" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_D.Na_D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_14">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_18">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_19">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17705" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the descending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M.H2O_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_20">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_22">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_23" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_R.H2O_I">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_50">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_13" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water filtrate in the proximal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_R.Na_max">
+      <dcterms:description>concentration of maximal amount of sodium reabsorption that can be achieved by the late distal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M.H2O_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_30">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water conservation (quantity) in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M_A.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_42">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_G.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_38">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_28">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M.Na_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_22">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_26">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_23" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#pi_G.pi_G">
+      <dcterms:description>oncotic pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.C_E">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_4">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_2" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (bloood pasma) in the efferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.Na_G">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_36">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration gradient between the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#model_parameters.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.R_A">
+      <dcterms:description>resistance of the afferent arteriole</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.P_G">
+      <dcterms:description>hydrostatic pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.H2O_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_33">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M.Na_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_29">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.D_TGF">
+      <dcterms:description>delay in sending the TGF signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#R_ALD.R_ALD">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_48">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_30">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_29">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0072068" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:27584" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of aldosterone in the late distal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_R.R_ADH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_49">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_28">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_29" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:9937" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of antidiuretic hormone (ADH) in the distal tubule (ADH is also known as vasopressin)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#R_A.H_A">
+      <dcterms:description>average afferent haematocrit (the ratio of the volume of red blood cells to the total volume of blood) for the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.P_V">
+      <dcterms:description>venous pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_G.Na_G">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_37">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration gradient between the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#epsilon.zeta">
+      <dcterms:description>damping coefficient in the TGF signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.Na_M_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_35">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.epsilon_max">
+      <dcterms:description>response of the afferent arteriole to the tubuloglomerular feedback signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M.H2O_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_27">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#epsilon.omega">
+      <dcterms:description>natural frequency (angular frequency) of the TGF mechanism</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_D.H2O_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_26">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_14" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water conservation (quantity) in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_R.Na_I">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_53">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium filtrate in the proximal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M.Na_G">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_21">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_24" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration gradient between the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#pi_G.C_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_7">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_0">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_1">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma77042" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma66843" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (blood plasma) in the afferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_D.H2O_D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_23">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_20">
+              <ro:part_of rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_19" />
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:15377" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the descending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#model_parameters.C_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_0">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (blood plasma) in the afferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_D.Na_D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_24">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_18" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the descending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.Na_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_31">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_26" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_D.H2O_D">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_15">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_20" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the descending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#SNGFR.P_G">
+      <dcterms:description>hydrostatic pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M.H2O_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_19">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.H2O_M_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_34">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_27" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid and the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#R_A.gamma">
+      <dcterms:description>viscous resistance coefficient in the glomerulus</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_G.Na_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_39">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_26" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M_A.Na_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_43">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_26" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_R.R_ALD">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_52">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_30" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of aldosterone in the late distal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.Na_half">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_5">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_4">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_5">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma15624" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/chebi/CHEBI:26708" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium delivery in the glomerulus for which the TGF response is half maximal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#R_ADH.R_ADH">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_47">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_28" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of antidiuretic hormone (ADH) in the distal tubule (ADH is also known as vasopressin)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#SNGFR.P_BC">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_9">
+          <semsim:physicalPropertyOf>
+            <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_9">
+              <ro:part_of>
+                <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_10">
+                  <semsim:hasPhysicalDefinition rdf:resource="http://purl.org/sig/ont/fma/fma17721" />
+                </rdf:Description>
+              </ro:part_of>
+              <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/go/GO:0008217" />
+            </rdf:Description>
+          </semsim:physicalPropertyOf>
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00509" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>pressure in the distal tubule ("at the start of the tubule" is mentioned in the paper, I assume distal tubule!)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.C_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_3">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_0" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of protein (blood plasma) in the afferent arteriole (?? "plasma membrane protein" from FMA??)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_A.H2O_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_32">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_22" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#R_A.R_A">
+      <dcterms:description>resistance of the afferent arteriole</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_I.Na_I">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_10">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_11" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium filtrate in the proximal tubule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_D_M.Na_D_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_13">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_17" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>concentration of sodium in the descending limb and interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#SNGFR.SNGFR">
+      <semsim:hasPhysicalDefinition rdf:resource="http://purl.bioontology.org/ontology/SNOMEDCT/80274001" />
+      <dcterms:description>single nephron glomerular filtration rate (SNGFR)</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_M.Na_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_18">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_6" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00340" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>sodium concentration in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#P_G.R_E">
+      <dcterms:description>resistance of the efferent arteriole</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.kappa">
+      <dcterms:description>range constant for the TGF signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#Na_D.H2O_M">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_16">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_21" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the interstitial fluid of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_M_A.H2O_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_46">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_22" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#H2O_A.H2O_A">
+      <semsim:isComputationalComponentFor>
+        <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#property_40">
+          <semsim:physicalPropertyOf rdf:resource="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#entity_22" />
+          <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_00154" />
+        </rdf:Description>
+      </semsim:isComputationalComponentFor>
+      <dcterms:description>water in the ascending limb of the loop of Henle</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#environment.time">
+      <semsim:hasPhysicalDefinition rdf:resource="http://identifiers.org/opb/OPB_01023" />
+      <dcterms:description>Time</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#SNGFR.Kf">
+      <dcterms:description>permeability constant for the glomerulus from blood in lumen of glomerulus to ultrafiltrate in lumen of bowman's capsule</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#phi.phi">
+      <dcterms:description>tubuloglomerular feedback signal</dcterms:description>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.bhi.washington.edu/SemSim/14102016092758052p1300#SNGFR.pi_G">
+      <dcterms:description>oncotic pressure in the glomerulus</dcterms:description>
+    </rdf:Description>
+  </rdf:RDF>
+</model>
+
