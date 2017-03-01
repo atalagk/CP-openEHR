@@ -15,7 +15,12 @@ password = login["thinkehr"][server]["password"]
 
 # Bioportal
 bioportal_url = login["bioportal"]["url"]
-api_key = login["bioportal"]["API_KEY"]
+bioportal_api_key = login["bioportal"]["API_KEY"]
+
+# UMLS
+umls_url = login["umls"]["url"]
+umls_api_key = login["umls"]["API_KEY"]
+
 
 if __name__ == "__main__":
     print(baseUrl)
