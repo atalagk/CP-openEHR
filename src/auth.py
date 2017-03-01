@@ -19,6 +19,8 @@ bioportal_api_key = login["bioportal"]["API_KEY"]
 
 # UMLS
 umls_url = login["umls"]["url"]
+umls_tgt_url = login["umls"]["tgt_url"]
+umls_st_url = login["umls"]["st_url"]
 umls_api_key = login["umls"]["API_KEY"]
 
 
