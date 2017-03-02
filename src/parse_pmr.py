@@ -2,8 +2,10 @@ from io import BytesIO
 import requests
 from lxml import etree
 from rdflib.graph import Graph
+from urllib import parse
 import pprint
 import json
+import ontology_lookup
 
 
 def getcellmltree(location):
@@ -40,13 +42,6 @@ def get_json(rdfs):
             tl = []
     return js
 
-def get_annots(cellmlname):
-    tree = getcellmltree(cellmlname)
-    grrdf = xmltree_to_rdfgraph(tree)
-    triples = get_json(grrdf)
-    pairs = add_labels(triples)
-    return json.dumps(pairs)
-
 
 def add_labels(triples):
     quadruples = []
@@ -56,12 +51,44 @@ def add_labels(triples):
         items.append(str(s))
         items.append(str(p))
         items.append(str(o))
-        items.append('label')
+
+        try:
+            ont, code = resolve_identifiers(str(o))
+        except:
+            label = 'TODO: other ontology label!!!'
+            items.append(label)
+            quadruples.append(items)
+            items = []
+            continue
+        encoded_code = parse.quote_plus(code)
+        label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+        items.append(label)
+
         quadruples.append(items)
         items = []
-
     return quadruples
 
+# http://identifiers.org/opb/OPB_00340
+# http://identifiers.org/fma/FMA:84669
+# http://identifiers.org/go/GO:0005391
+# http://identifiers.org/chebi/CHEBI:26708
+
+def resolve_identifiers(id=''):
+    if id.startswith('http://identifiers.org'):
+        ont_end = id.find('/', 23)
+        ont = id[23:ont_end]
+        code = id[ont_end+1:]
+
+        if ont == 'opb':
+            return ont, 'http://bhi.washington.edu/OPB#' + code
+
+
+def get_annots(cellmlname):
+    tree = getcellmltree(cellmlname)
+    grrdf = xmltree_to_rdfgraph(tree)
+    triples = get_json(grrdf)
+    quadruples = add_labels(triples)
+    return json.dumps(quadruples)
 
 
 if __name__ == "__main__":
