@@ -29,32 +29,46 @@ def get_json(rdfs):
     tl = []
     tr = {}
     js = []
-    i = 1
     for s, p, o in rdfs:
         if s.startswith('http://identifiers.org') or \
         p.startswith('http://identifiers.org') or \
         o.startswith('http://identifiers.org'):
-
             tl.append(str(s))
             tl.append(str(p))
             tl.append(str(o))
-            tr = {str(i): tl}
-            i += 1
-            js.append(tr)
+            js.append(tl)
             tl = []
     return js
 
 def get_annots(cellmlname):
     tree = getcellmltree(cellmlname)
     grrdf = xmltree_to_rdfgraph(tree)
-    js = get_json(grrdf)
-    return json.dumps(js)
+    triples = get_json(grrdf)
+    pairs = add_labels(triples)
+    return json.dumps(pairs)
+
+
+def add_labels(triples):
+    quadruples = []
+    items = []
+
+    for s, p, o in triples:
+        items.append(str(s))
+        items.append(str(p))
+        items.append(str(o))
+        items.append('label')
+        quadruples.append(items)
+        items = []
+
+    return quadruples
+
 
 
 if __name__ == "__main__":
     annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
     #annots = get_annots('..\\models\chang_fujita_1999-semgen.cellml')
-    pprint.pprint(annots)
+    #pprint.pprint(annots)
+    print(annots)
 
     '''
     https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml

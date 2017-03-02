@@ -10,9 +10,9 @@ def home():
 @app.route('/pmr', methods=['GET', 'POST'])
 def pyapi():
     if request.method == 'POST':
-        modelname = request.form['cellml']
-        annotjson = parse_pmr.get_annots(modelname)
-        resp = make_response(annotjson)
+        modelurl = request.form['cellml']
+        annottriples = parse_pmr.get_annots(modelurl)
+        resp = make_response(annottriples)
         resp.headers['Content-Type'] = "text/json"
         return resp
 
@@ -24,6 +24,6 @@ def pyapi():
 
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(debug=True)
 
-# curl -X POST http://127.0.0.1:5000/pmr -d cellml="chang_fujita_1999-semgen.cellml"
+# curl -X POST http://127.0.0.1:5000/pmr -d cellml="https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml"
