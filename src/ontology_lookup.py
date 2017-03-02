@@ -59,10 +59,10 @@ def get_term_by_code(**kwargs):
 
 if __name__ == "__main__":
     # t = get_term_by_code(lookupService='umls', ontology='SNOMEDCT_US', code='9468002')
-    #t = get_term_by_code(lookupService='umls', ontology='FMA', codes=['17705', '84669', '84666', '71132', '7131'])
+    t = get_term_by_code(lookupService='umls', ontology='FMA', codes=['17705', '84669', '84666', '71132', '7131'])
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
-    t = get_term_by_code(lookupService='bioportal', ontology='FMA', codes=['http://purl.org/sig/ont/fma/fma84666', 'http://purl.org/sig/ont/fma/fma84669'])
+    #t = get_term_by_code(lookupService='bioportal', ontology='FMA', codes=['http://purl.org/sig/ont/fma/fma84666', 'http://purl.org/sig/ont/fma/fma84669'])
 
     for term in t:
         print(term)
