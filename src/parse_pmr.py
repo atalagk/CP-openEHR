@@ -7,6 +7,9 @@ import pprint
 import json
 import ontology_lookup
 
+triple = ['', '', '']
+cache = []
+cache.append(triple)
 
 def getcellmltree(location):
     if str(location).startswith('http'):
@@ -60,13 +63,30 @@ def add_labels(triples):
             quadruples.append(items)
             items = []
             continue
-        encoded_code = parse.quote_plus(code)
-        label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+        #encoded_code = parse.quote_plus(code)
+        #label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+        label = find_label(ont, code)
         items.append(label)
-
         quadruples.append(items)
         items = []
     return quadruples
+
+
+def find_label (ont, code):
+    global cache
+    for triple in cache:
+        if triple[0] == ont and triple[1] == code:
+            label = triple[2]
+            return label
+
+    newtriple = []
+    encoded_code = parse.quote_plus(code)
+    label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+    newtriple.append(ont)
+    newtriple.append(code)
+    newtriple.append(label)
+    cache.append(newtriple)
+    return label
 
 # http://identifiers.org/opb/OPB_00340      >>  http://bhi.washington.edu/OPB#OPB_00340     (Chemical concentration)
 # http://identifiers.org/fma/FMA:84666      >>  http://purl.org/sig/ont/fma/fma84666        (Apical plasma membrane)
@@ -101,8 +121,8 @@ def get_annots(cellmlname):
 
 
 if __name__ == "__main__":
-    #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
-    annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
+    annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
+    #annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
     pprint.pprint(annots)
     #print(annots)
 

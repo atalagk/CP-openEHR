@@ -11,8 +11,8 @@ def home():
 def pyapi():
     if request.method == 'POST':
         modelurl = request.form['cellml']
-        annottriples = parse_pmr.get_annots(modelurl)
-        resp = make_response(annottriples)
+        annots = parse_pmr.get_annots(modelurl)
+        resp = make_response(annots)
         resp.headers['Content-Type'] = "text/json"
         return resp
 
