@@ -14,12 +14,14 @@ def pyapi():
         annots = parse_pmr.get_annots(modelurl)
         resp = make_response(annots)
         resp.headers['Content-Type'] = "text/json"
+        resp.headers['Access-Control-Allow-Origin'] = "*"
         return resp
 
     if request.method == 'GET':
         result = "you get this from GET"
         resp = make_response(result)
         resp.headers['Content-Type'] = "text/plain"
+        resp.headers['Access-Control-Allow-Origin'] = "*"
         return resp
 
 
