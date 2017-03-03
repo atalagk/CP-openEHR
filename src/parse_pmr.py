@@ -68,10 +68,10 @@ def add_labels(triples):
         items = []
     return quadruples
 
-# http://identifiers.org/opb/OPB_00340
-# http://identifiers.org/fma/FMA:84669
-# http://identifiers.org/go/GO:0005391
-# http://identifiers.org/chebi/CHEBI:26708
+# http://identifiers.org/opb/OPB_00340      >>  http://bhi.washington.edu/OPB#OPB_00340     (Chemical concentration)
+# http://identifiers.org/fma/FMA:84666      >>  http://purl.org/sig/ont/fma/fma84666        (Apical plasma membrane)
+# http://identifiers.org/go/GO:0070489      >>  http://purl.obolibrary.org/obo/GO_0070489   (T cell aggregation)
+# http://identifiers.org/chebi/CHEBI:26708  >>  http://purl.obolibrary.org/obo/CHEBI_26708  (sodium-23 atom)
 
 def resolve_identifiers(id=''):
     if id.startswith('http://identifiers.org'):
@@ -81,6 +81,15 @@ def resolve_identifiers(id=''):
 
         if ont == 'opb':
             return ont, 'http://bhi.washington.edu/OPB#' + code
+        elif ont == 'fma':
+            newcode = code.replace(':', '').lower()
+            return ont, 'http://purl.org/sig/ont/fma/' + newcode
+        elif ont == 'go':
+            newcode = code.replace(':', '_')
+            return ont, 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'chebi':
+            newcode = code.replace(':', '_')
+            return ont, 'http://purl.obolibrary.org/obo/' + newcode
 
 
 def get_annots(cellmlname):
@@ -92,10 +101,10 @@ def get_annots(cellmlname):
 
 
 if __name__ == "__main__":
-    annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
-    #annots = get_annots('..\\models\chang_fujita_1999-semgen.cellml')
-    #pprint.pprint(annots)
-    print(annots)
+    #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
+    annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
+    pprint.pprint(annots)
+    #print(annots)
 
     '''
     https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml

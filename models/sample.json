@@ -1,0 +1,26 @@
+[
+	[
+		"http://www.bhi.washington.edu/SemSim/14102016093627598p1300#property_15",
+		"http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+        "http://identifiers.org/opb/OPB_00340",
+		"OPB_00340 term label"
+    ],
+	[
+		"#chang_fujita_b_1999",
+        "http://www.obofoundry.org/ro/ro.owl#located_in",
+        "http://identifiers.org/fma/FMA:84669",
+		"FMA_84669 term label"
+    ],
+	[
+		"#Na-K-ATPase",
+        "http://www.obofoundry.org/ro/ro.owl#located_in",
+        "http://identifiers.org/go/GO:0005391",
+		"GO 0005391 term label"
+    ],
+	[
+		"http://www.bhi.washington.edu/SemSim/14102016093627598p1300#entity_8",
+        "http://www.bhi.washington.edu/SemSim#hasPhysicalDefinition",
+        "http://identifiers.org/chebi/CHEBI:26708",
+		"CHEBI 26708 term label"
+    ]
+]

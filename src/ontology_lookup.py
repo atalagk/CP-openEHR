@@ -26,7 +26,10 @@ def get_term_by_code(**kwargs):
 
         urlnext = url + '/search?q=' + code + include
         r = requests.get(urlnext, headers=headers)
-        label = r.json()["collection"][0]["prefLabel"]
+        try:
+            label = r.json()["collection"][0]["prefLabel"]
+        except:
+            label = 'Error in label:' + code
         return label
 
     elif lookupService == 'umls':
