@@ -1,36 +1,22 @@
 import tehr_helpers
 import json
-import pprint
 import collections
 
-preAql = None
+archPathAnnots = []
 
-
-def unpackStdAnnotations(term, aql, nodeId):
-    tbs = collections.OrderedDict()
-    ls = []
+def unpackStdAnnotations(term, aqlPath, nodeId, type):
     for d in term.values():
-        tId = d['terminologyId']
-        tVal = d['value']
-
-        global preAql
-        if aql == 'N/A':
-            tbs['type'] = "Valuelist from Archetype"
-            tbs['path'] = preAql
-        else:
-            tbs['type'] = 'Archetype path'
-            tbs['path'] = aql
-            preAql = aql
-
-        tbs['nodeId'] = nodeId
-        tbs['terminologyId'] = tId
-        tbs['code'] = tVal
-        if len(term)>1:
-            ls.append(tbs.copy())
-    if len(term) > 1:
-        return ls
-    else:
-        return tbs
+        tbs = {}
+        tid = d['terminologyId']
+        tval = d['value']
+        if aqlPath:
+            global archPathAnnots
+            tbs['type'] = type
+            tbs['aqlPath'] = aqlPath
+            tbs['nodeId'] = nodeId
+            tbs['terminologyId'] = tid
+            tbs['code'] = tval
+            archPathAnnots.append(tbs)
 
 
 # Generator parser
@@ -41,12 +27,12 @@ def item_generator(json_input, lookup_term, key):
                 try:
                     aq = json_input[key]
                 except:
-                    aq = 'N/A'
+                    aq = None
                 try:
-                    nodeId = json_input['nodeId']
+                    nodeid = json_input['nodeId']
                 except:
-                    nodeId = 'N/A'
-                yield v, aq, nodeId
+                    nodeid = None
+                yield v, aq, nodeid
             else:
                 for child_val in item_generator(v, lookup_term, key):
                     yield child_val
@@ -57,69 +43,66 @@ def item_generator(json_input, lookup_term, key):
 
 
 def getStdTermBindings (wt):
-    ls = []
     tbinds = item_generator(wt, 'termBindings', 'aqlPath')
-
     for t, a, n in tbinds:
-        ls.append(unpackStdAnnotations(t, a, n))
-    return ls
+        unpackStdAnnotations(t, a, n, 'Archetype path')
 
 
-def getCustomTermBindings(wt):
-
+def getValueTermBindings(wt):
     custom_tbinds = item_generator(wt, 'aqlPath', 'inputs')
-
     ls = []
-    for a, i, n in custom_tbinds:
-        if isinstance(i, list):
-            for item in i:
+    for aqlPath, inputs, nodeId in custom_tbinds:
+        if isinstance(inputs, list):
+            for item in inputs:
                 try:
                     if item['suffix'] == 'code' and item['type'] == 'CODED_TEXT':
-                        if item['terminology'] is not None and item['terminology'] != 'openehr':
+                        try:
+                            if item['terminology'] is not None and item['terminology'] != 'openehr':
+                                for moreitem in item['list']:
+                                    tbs = collections.OrderedDict()
+                                    tbs['type'] = 'Template valuelist'
+                                    tbs['path'] = aqlPath
+                                    tbs['nodeId'] = nodeId
+                                    tbs['terminologyId'] = item['terminology']
+                                    tbs['code'] = moreitem['value']
+                                    ls.append(tbs)
+
+                        except KeyError:
                             for moreitem in item['list']:
-                                tbs = collections.OrderedDict()
-                                tbs['type'] = 'Valuelist from Template'
-                                tbs['path'] = a
-                                tbs['nodeId'] = n
-                                tbs['terminologyId'] = item['terminology']
-                                tbs['code'] = moreitem['value']
-                                ls.append(tbs)
-                except:
+                                tbs = moreitem['termBindings']
+                                nodeId = moreitem['value']
+                                unpackStdAnnotations(tbs, aqlPath, nodeId, 'Archetype valuelist')
+
+                except KeyError:
                     pass
     return ls
 
 
 def getTermBindings(**kwargs):
 
-    templateName = kwargs.get('templateName', None)
-    templateFile = kwargs.get('templateFile', None)
+    template_name = kwargs.get('templateName', None)
+    template_file = kwargs.get('templateFile', None)
 
-    if templateName:
-        wt = tehr_helpers.getWebTemplate(templateName=templateName).json()
-    if templateFile:
-        with open(templateFile) as webTemplateFile:
+    if template_name and not template_file:
+        wt = tehr_helpers.getWebTemplate(templateName=template_name).json()
+    if template_file and not template_name:
+        with open(template_file) as webTemplateFile:
             wt = json.load(webTemplateFile)
 
-    tbs = {}
-    l1 = getStdTermBindings(wt)
-    l2 = getCustomTermBindings(wt)
-    tbs = l1 + l2
+    term_bindings = {}
+    l1 = getValueTermBindings(wt)
+    getStdTermBindings(wt)
+    term_bindings= l1 + archPathAnnots
 
-    # need to call with either TemplateName or TemplateFile BUT not both!
-    if templateName and not templateFile:
-        tinfo = {'Template name': templateName}
-    if templateFile and not templateName:
-        tinfo = {'Template file': templateFile}
-    tbdict = {'Terminology bindings': tbs}
-    tbinds = {**tinfo, **tbdict}  # works Python >3.5
-    return tbinds
+    return term_bindings
 
 
 if __name__ == "__main__":
     templateName = ''
     templateFile = ''
 
-    templateName = 'KorayClinical4'
+    #templateName = 'KorayClinical4'
+    templateFile = '..\\models\KorayClinical4-webtemplate.json'
     #templateFile = '..\\models\ANZACS-ACS.webtemplate.json'
 
     tb = None
