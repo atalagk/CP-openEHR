@@ -16,11 +16,10 @@ def get_term_by_code(**kwargs):
         headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
 
         include = ''
-        #include = "&ontologies=SNOMEDCT"
+        if ontology:
+            include = "&ontologies=" + str(ontology).upper()
         include += "&display_context=false"
-        # include += "&cui=C0018799"
-        include += "&include=prefLabel"  # ,cui
-        # include += "&suggest=true"
+        include += "&include=prefLabel"
         include += "&require_exact_match=true"
         include += "&display_links=false"
 

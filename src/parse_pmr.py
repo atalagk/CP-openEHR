@@ -30,7 +30,7 @@ def xmltree_to_rdfgraph(tree):
     return graph
 
 
-def get_json(rdfs):
+def get_triples(rdfs):
     tl = []
     tr = {}
     js = []
@@ -115,15 +115,20 @@ def resolve_identifiers(id=''):
 def get_annots(cellmlname):
     tree = getcellmltree(cellmlname)
     grrdf = xmltree_to_rdfgraph(tree)
-    triples = get_json(grrdf)
+    triples = get_triples(grrdf)
     quadruples = add_labels(triples)
     return json.dumps(quadruples)
 
 
 if __name__ == "__main__":
+    from time import time
+
+    start_time = time()
     annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
-    #annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
+    # annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
     pprint.pprint(annots)
+    dt = str(time() - start_time)
+    print('Finished in seconds: ' + dt)
     #print(annots)
 
     '''
