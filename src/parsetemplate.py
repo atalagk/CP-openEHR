@@ -80,6 +80,8 @@ def getValueTermBindings(wt):
 
 def getTermBindings(**kwargs):
 
+    global archPathAnnots
+    archPathAnnots = []
     template_name = kwargs.get('templateName', None)
     template_file = kwargs.get('templateFile', None)
 
@@ -92,9 +94,9 @@ def getTermBindings(**kwargs):
     term_bindings = {}
     l1 = getValueTermBindings(wt)
     getStdTermBindings(wt)
-    term_bindings= l1 + archPathAnnots
+    term_bindings = l1 + archPathAnnots
 
-    return term_bindings
+    return json.dumps(term_bindings)
 
 
 if __name__ == "__main__":

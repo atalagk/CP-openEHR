@@ -17,7 +17,8 @@ def get_term_by_code(**kwargs):
 
         include = ''
         if ontology:
-            include = "&ontologies=" + str(ontology).upper()
+            if ontology != 'chebi':     # probably a bug in Bioportal! when set chebi r = None!
+                include = "&ontologies=" + str(ontology).upper()
         include += "&display_context=false"
         include += "&include=prefLabel"
         include += "&require_exact_match=true"

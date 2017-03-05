@@ -63,8 +63,6 @@ def add_labels(triples):
             quadruples.append(items)
             items = []
             continue
-        #encoded_code = parse.quote_plus(code)
-        #label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
         label = find_label(ont, code)
         items.append(label)
         quadruples.append(items)
@@ -91,7 +89,7 @@ def find_label (ont, code):
 # http://identifiers.org/opb/OPB_00340      >>  http://bhi.washington.edu/OPB#OPB_00340     (Chemical concentration)
 # http://identifiers.org/fma/FMA:84666      >>  http://purl.org/sig/ont/fma/fma84666        (Apical plasma membrane)
 # http://identifiers.org/go/GO:0070489      >>  http://purl.obolibrary.org/obo/GO_0070489   (T cell aggregation)
-# http://identifiers.org/chebi/CHEBI:26708  >>  http://purl.obolibrary.org/obo/CHEBI_26708  (sodium-23 atom)
+# http://identifiers.org/chebi/CHEBI:26708  >>  http://purl.obolibrary.org/obo/CHEBI_26708  (sodium atom)
 
 def resolve_identifiers(id=''):
     if id.startswith('http://identifiers.org'):
