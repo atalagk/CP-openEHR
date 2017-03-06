@@ -12,7 +12,7 @@ def get_term_by_code(**kwargs):
     version = kwargs.get('version', 'current')
     newurl = kwargs.get('url_extension', None)
 
-    if not lookupService:
+    if lookupService:
         # Generic lookup service with a specified particular ontology service
         if lookupService == 'bioportal':
             url = auth.bioportal_url
@@ -55,38 +55,56 @@ def get_term_by_code(**kwargs):
             items = json.loads(r.text)
             result = items["result"]["name"]
             return result
-        else:
-            # Hardcoded ontology lookup that makes use of EBI OLS for FMA, CHEBI, GO and Bioportal for FMA
-            if ontology == 'chebi' or ontology == 'go' or ontology == 'fma':
-                header = {'Accept': 'application/json'}
-                encoded_code = url_encode(code, 2)
-                url = auth.ols_url + 'ontologies/' + ontology + '/terms/' + encoded_code
-                r = requests.get(url, headers=header)
-                items = r.json()
-                try:
-                    label = items['label']
-                except KeyError:
-                    label = 'Error in= ' + code
-                return label
+    else:
+        # Hardcoded ontology lookup that makes use of EBI OLS for FMA, CHEBI, GO and Bioportal for FMA
+        if ontology == 'chebi' or ontology == 'go' or ontology == 'fma':
+            #return get_label_localowl(ontology, code)
+            header = {'Accept': 'application/json'}
+            encoded_code = url_encode(code, 2)
+            url = auth.ols_url + 'ontologies/' + ontology + '/terms/' + encoded_code
+            r = requests.get(url, headers=header)
+            items = r.json()
+            try:
+                label = items['label']
+            except KeyError:
+                label = 'Error in= ' + code
+            return label
 
-            elif ontology == 'opb':
-                url = auth.bioportal_url
-                headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
-                include = '&ontologies=OPB'
-                include += "&display_context=false"
-                include += "&include=prefLabel"
-                include += "&require_exact_match=true"
-                include += "&display_links=false"
+        elif ontology == 'opb':
+            #return get_label_localowl(ontology, code)  # gets from local OPB.owl
+            url = auth.bioportal_url
+            headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
+            include = '&ontologies=OPB'
+            include += "&display_context=false"
+            include += "&include=prefLabel"
+            include += "&require_exact_match=true"
+            include += "&display_links=false"
 
-                encoded_code = url_encode(code, 1)
-                urlnext = url + '/search?q=' + encoded_code + include
-                r = requests.get(urlnext, headers=headers)
-                try:
-                    label = r.json()["collection"][0]["prefLabel"]
-                except:
-                    label = 'Error in label:' + code
-                return label
+            encoded_code = url_encode(code, 1)
+            urlnext = url + '/search?q=' + encoded_code + include
+            r = requests.get(urlnext, headers=headers)
+            try:
+                label = r.json()["collection"][0]["prefLabel"]
+            except:
+                label = 'Error in label:' + code
+            return label
 
+def get_label_localowl(ont, code):
+    # Absolutely very slow for large owl files (for OPB it is OK, but for FMA not!!!
+    from rdflib import Graph
+    from rdflib.namespace import RDFS
+
+    g = Graph()
+    ontology = '..' + chr(92) + 'models' + chr(92) + str(ont).upper() + '.owl'
+    g.parse(ontology)
+    newcode = str(code).rsplit('#')[-1]
+
+    for subj, obj in g.subject_objects(predicate=RDFS.label):
+        if newcode in subj:
+            label = obj.rsplit('#')[-1]
+            return label
+    label = 'Label not found in local ontology=' + ont + 'for code=' + code
+    return label
 
 def resolve_identifiers(id=''):
     if id.startswith('http://identifiers.org'):

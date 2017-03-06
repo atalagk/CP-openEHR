@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     start_time = time()
     annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
-    # annots = get_annots('..\\models\eeler_reuter_1977-sample1.cellml')
+    #annots = get_annots('..' + chr(92) + 'models' + chr(92) + 'beeler_reuter_1977-sample.cellml')
     pprint.pprint(annots)
     dt = str(time() - start_time)
     print('Finished in seconds: ' + dt)

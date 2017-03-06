@@ -1273,6 +1273,157 @@ The breakdown of the model into components and the definition of encapsulation a
         <map_variables variable_1="time" variable_2="time"/>
     </connection>
     <rdf:RDF>
+        <rdf:Description rdf:about="rdf:#46dea9a4-f216-4183-8dec-e37c44430f80">
+            <dcterms:modified>
+                <rdf:Description rdf:about="rdf:#98f2fb7a-ae19-422e-bf73-26e592cfc801"/>
+            </dcterms:modified>
+            <rdf:value xml:lang="en">Changed model cmeta:id from beeler_reuter_1977_version06 to beeler_reuter_1977</rdf:value>
+            <cmeta:modifier>
+                <rdf:Description rdf:about="rdf:#25a69a5a-c684-4da8-b278-1dc132a0d1d2"/>
+            </cmeta:modifier>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#98f2fb7a-ae19-422e-bf73-26e592cfc801">
+            <dcterms:W3CDTF xml:lang="en">2008-05-20T10:56:34+12:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#25a69a5a-c684-4da8-b278-1dc132a0d1d2">
+            <vCard:N>
+                <rdf:Description rdf:about="rdf:#c847c2fe-7c48-4b6e-9cfe-06f0573cebf3"/>
+            </vCard:N>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#c847c2fe-7c48-4b6e-9cfe-06f0573cebf3">
+            <vCard:Given xml:lang="en">James</vCard:Given>
+            <vCard:Family xml:lang="en">Lawson</vCard:Family>
+            <vCard:Other xml:lang="en">Richard</vCard:Other>
+        </rdf:Description>
+        <rdf:Description rdf:about="">
+            <dc:publisher xml:lang="en"/>
+            <cmeta:comment>
+                <rdf:Description rdf:about="rdf:#43885da7-17c7-47e4-83a2-9680d72b78db"/>
+            </cmeta:comment>
+            <dcterms:created>
+                <rdf:Description rdf:about="rdf:#a33cc46e-5ead-468d-9b18-0cd58caf6527"/>
+            </dcterms:created>
+            <dc:creator>
+                <rdf:Description rdf:about="rdf:#88adedca-bf60-46b7-94d4-d2fadfea04f6"/>
+            </dc:creator>
+            <cmeta:modification>
+                <rdf:Description rdf:about="rdf:#46dea9a4-f216-4183-8dec-e37c44430f80"/>
+            </cmeta:modification>
+            <cmeta:modification>
+                <rdf:Description rdf:about="rdf:#4a58e4ff-222b-4ee4-89ba-ab5b6b51306c"/>
+            </cmeta:modification>
+            <cmeta:modification>
+                <rdf:Description rdf:about="rdf:#77f98dda-c979-49f1-9bcf-da4944906f91"/>
+            </cmeta:modification>
+            <cmeta:modification>
+                <rdf:Description rdf:about="rdf:#fc128820-8eb0-45dd-9403-858fa9abecce"/>
+            </cmeta:modification>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#43885da7-17c7-47e4-83a2-9680d72b78db">
+            <rdf:value xml:lang="en">In contrast to the earlier Purkinje fibre ionic current models of D. Noble (1962) and R.E. McAllister, D. Noble and R.W. Tsien (1975) (MNT model), the G.W. Beeler and H. Reuter 1977 model was developed to describe the mammalian ventricular action potential.  Not all the ionic currents of the Purkinje fibre model are present in ventricular tissue; therefore, this model is simpler than the MNT model.  The total ionic flux is divided into only four discrete, individual ionic currents. The main additional feature of the Beeler-Reuter ionic current model is a representation of the intracellular calcium ion concentration.</rdf:value>
+            <dc:creator>
+                <rdf:Description rdf:about="rdf:#a08c03e3-1e46-4ba0-a251-db1c880cdc47"/>
+            </dc:creator>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#a33cc46e-5ead-468d-9b18-0cd58caf6527">
+            <dcterms:W3CDTF xml:lang="en">2008-05-08T00:00:00+00:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#88adedca-bf60-46b7-94d4-d2fadfea04f6">
+            <vCard:N>
+                <rdf:Description rdf:about="rdf:#9c5e9628-92e3-4989-a4b1-21fce295ab89"/>
+            </vCard:N>
+            <vCard:ORG>
+                <rdf:Description rdf:about="rdf:#ea2746fa-bc94-46e4-b3d5-139087e2de83"/>
+            </vCard:ORG>
+            <vCard:EMAIL>
+                <rdf:Description rdf:about="rdf:#5f07f94d-c095-4d91-8022-5c9e1d031784"/>
+            </vCard:EMAIL>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#4a58e4ff-222b-4ee4-89ba-ab5b6b51306c">
+            <dcterms:modified>
+                <rdf:Description rdf:about="rdf:#88e35c6f-2152-4aaf-b5c5-2e9386294633"/>
+            </dcterms:modified>
+            <rdf:value xml:lang="en">Re-added cmeta:id's for 4 major currents that had been deleted by COR</rdf:value>
+            <cmeta:modifier>
+                <rdf:Description rdf:about="rdf:#afa4cd78-229d-4ebf-a4a8-fa22c7c0f813"/>
+            </cmeta:modifier>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#77f98dda-c979-49f1-9bcf-da4944906f91">
+            <dcterms:modified>
+                <rdf:Description rdf:about="rdf:#e7527bce-f615-4263-afc0-c075d70b6e23"/>
+            </dcterms:modified>
+            <rdf:value xml:lang="en">Added an intial value for X1 to enable the model to run.</rdf:value>
+            <cmeta:modifier>
+                <rdf:Description rdf:about="rdf:#baef8605-6d17-47bc-b214-261f23273934"/>
+            </cmeta:modifier>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#fc128820-8eb0-45dd-9403-858fa9abecce">
+            <dcterms:modified>
+                <rdf:Description rdf:about="rdf:#393fb186-60b8-4cf5-9d36-700524a5507e"/>
+            </dcterms:modified>
+            <rdf:value xml:lang="en">Updated cmeta:id's for reference by PCEnv sessions.
+
+Added simulation metadata to allow simulation for 10,000 ms</rdf:value>
+            <cmeta:modifier>
+                <rdf:Description rdf:about="rdf:#882c08d9-19e5-4f37-b2d2-29b13404df3d"/>
+            </cmeta:modifier>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#a08c03e3-1e46-4ba0-a251-db1c880cdc47">
+            <vCard:FN xml:lang="en">Catherine Lloyd</vCard:FN>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#9c5e9628-92e3-4989-a4b1-21fce295ab89">
+            <vCard:Given xml:lang="en">Catherine</vCard:Given>
+            <vCard:Family xml:lang="en">Lloyd</vCard:Family>
+            <vCard:Other xml:lang="en">May</vCard:Other>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#ea2746fa-bc94-46e4-b3d5-139087e2de83">
+            <vCard:Orgname xml:lang="en">University of Auckland</vCard:Orgname>
+            <vCard:Orgunit xml:lang="en">Auckland Bioengineering Institute</vCard:Orgunit>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#5f07f94d-c095-4d91-8022-5c9e1d031784">
+            <rdf:type>
+                <rdf:Description rdf:about="http://imc.org/vCard/3.0#internet"/>
+            </rdf:type>
+            <rdf:value xml:lang="en">c.lloyd@auckland.ac.nz</rdf:value>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#88e35c6f-2152-4aaf-b5c5-2e9386294633">
+            <dcterms:W3CDTF xml:lang="en">2008-05-20T11:16:23+12:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#afa4cd78-229d-4ebf-a4a8-fa22c7c0f813">
+            <vCard:N>
+                <rdf:Description rdf:about="rdf:#0d7eb214-b680-484f-950d-994248dbaf49"/>
+            </vCard:N>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#e7527bce-f615-4263-afc0-c075d70b6e23">
+            <dcterms:W3CDTF xml:lang="en">2008-05-08T03:15:26+12:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#baef8605-6d17-47bc-b214-261f23273934">
+            <vCard:N>
+                <rdf:Description rdf:about="rdf:#ef9ea29b-ae5e-4db0-975e-42fe8f0092ed"/>
+            </vCard:N>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#393fb186-60b8-4cf5-9d36-700524a5507e">
+            <dcterms:W3CDTF xml:lang="en">2008-05-20T11:41:27+12:00</dcterms:W3CDTF>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#882c08d9-19e5-4f37-b2d2-29b13404df3d">
+            <vCard:N>
+                <rdf:Description rdf:about="rdf:#b3fe2703-32a4-4c1f-a9d9-ca586e569cc8"/>
+            </vCard:N>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#ef9ea29b-ae5e-4db0-975e-42fe8f0092ed">
+            <vCard:Given xml:lang="en">Penny</vCard:Given>
+            <vCard:Family xml:lang="en">Noble</vCard:Family>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#0d7eb214-b680-484f-950d-994248dbaf49">
+            <vCard:Given xml:lang="en">James</vCard:Given>
+            <vCard:Family xml:lang="en">Lawson</vCard:Family>
+            <vCard:Other xml:lang="en">Richard</vCard:Other>
+        </rdf:Description>
+        <rdf:Description rdf:about="rdf:#b3fe2703-32a4-4c1f-a9d9-ca586e569cc8">
+            <vCard:Given xml:lang="en">James</vCard:Given>
+            <vCard:Family xml:lang="en">Lawson</vCard:Family>
+            <vCard:Other xml:lang="en">Richard</vCard:Other>
+        </rdf:Description>
         <rdf:Description rdf:about="#beeler_reuter_1977">
             <encodes xmlns="http://biomodels.net/biology-qualifiers/">
                 <rdf:Description rdf:about="http://identifiers.org/opb/OPB_00340"/>
@@ -1297,21 +1448,6 @@ The breakdown of the model into components and the definition of encapsulation a
             </encodes>
             <encodes xmlns="http://biomodels.net/biology-qualifiers/">
                 <rdf:Description rdf:about="http://identifiers.org/fma/FMA:86709"/>
-            </encodes>
-        </rdf:Description>
-        <rdf:Description rdf:about="#id_000000001">
-            <encodes xmlns="http://biomodels.net/biology-qualifiers/">
-                <rdf:Description rdf:about="http://identifiers.org/opb/OPB_00340"/>
-            </encodes>
-        </rdf:Description>
-        <rdf:Description rdf:about="#id_000000002">
-            <encodes xmlns="http://biomodels.net/biology-qualifiers/">
-                <rdf:Description rdf:about="http://identifiers.org/opb/OPB_00340"/>
-            </encodes>
-        </rdf:Description>
-        <rdf:Description rdf:about="#id_000000003">
-            <encodes xmlns="http://biomodels.net/biology-qualifiers/">
-                <rdf:Description rdf:about="http://identifiers.org/opb/OPB_00340"/>
             </encodes>
         </rdf:Description>
     </rdf:RDF>
