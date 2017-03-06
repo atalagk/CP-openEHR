@@ -1,6 +1,7 @@
 import auth
 import requests
 import json
+from urllib import parse
 from pyquery import PyQuery as pq
 
 
@@ -11,48 +12,108 @@ def get_term_by_code(**kwargs):
     version = kwargs.get('version', 'current')
     newurl = kwargs.get('url_extension', None)
 
-    if lookupService == 'bioportal':
-        url = auth.bioportal_url
-        headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
+    if not lookupService:
+        # Generic lookup service with a specified particular ontology service
+        if lookupService == 'bioportal':
+            url = auth.bioportal_url
+            headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
 
-        include = ''
-        if ontology:
-            if ontology != 'chebi':     # probably a bug in Bioportal! when set chebi r = None!
-                include = "&ontologies=" + str(ontology).upper()
-        include += "&display_context=false"
-        include += "&include=prefLabel"
-        include += "&require_exact_match=true"
-        include += "&display_links=false"
+            include = ''
+            if ontology:
+                if ontology != 'go' or ontology != 'chebi':
+                    include = '&ontologies=' + str(ontology).upper()
+            include += "&display_context=false"
+            include += "&include=prefLabel"
+            include += "&require_exact_match=true"
+            include += "&display_links=false"
 
-        urlnext = url + '/search?q=' + code + include
-        r = requests.get(urlnext, headers=headers)
-        try:
-            label = r.json()["collection"][0]["prefLabel"]
-        except:
-            label = 'Error in label:' + code
-        return label
+            urlnext = url + '/search?q=' + code + include
+            r = requests.get(urlnext, headers=headers)
+            try:
+                label = r.json()["collection"][0]["prefLabel"]
+            except:
+                label = 'Error in label:' + code
+            return label
 
-    elif lookupService == 'umls':
-        h = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "User-Agent": "python"}
-        params = {'apikey': auth.umls_api_key}
-        r = requests.post(auth.umls_tgt_url, data=params, headers=h)
-        d = pq(r.text)
-        tgt = d.find('form').attr('action')
+        elif lookupService == 'umls':
+            h = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "User-Agent": "python"}
+            params = {'apikey': auth.umls_api_key}
+            r = requests.post(auth.umls_tgt_url, data=params, headers=h)
+            d = pq(r.text)
+            tgt = d.find('form').attr('action')
 
-        params = {'service': auth.umls_st_url}
-        h = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "User-Agent": "python"}
-        r = requests.post(tgt, data=params, headers=h)
-        st = r.text
+            params = {'service': auth.umls_st_url}
+            h = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "User-Agent": "python"}
+            r = requests.post(tgt, data=params, headers=h)
+            st = r.text
 
-        url = 'https://uts-ws.nlm.nih.gov'
-        query = {'ticket': st}
-        content_endpoint = "/rest/content/" + str(version) + "/source/" + str(ontology) + "/" + str(code)
-        r = requests.get(url + content_endpoint, params=query)
-        r.encoding = 'utf-8'
-        items = json.loads(r.text)
-        result = items["result"]["name"]
-        return result
+            url = 'https://uts-ws.nlm.nih.gov'
+            query = {'ticket': st}
+            content_endpoint = "/rest/content/" + str(version) + "/source/" + str(ontology) + "/" + str(code)
+            r = requests.get(url + content_endpoint, params=query)
+            r.encoding = 'utf-8'
+            items = json.loads(r.text)
+            result = items["result"]["name"]
+            return result
+        else:
+            # Hardcoded ontology lookup that makes use of EBI OLS for FMA, CHEBI, GO and Bioportal for FMA
+            if ontology == 'chebi' or ontology == 'go' or ontology == 'fma':
+                header = {'Accept': 'application/json'}
+                encoded_code = url_encode(code, 2)
+                url = auth.ols_url + 'ontologies/' + ontology + '/terms/' + encoded_code
+                r = requests.get(url, headers=header)
+                items = r.json()
+                try:
+                    label = items['label']
+                except KeyError:
+                    label = 'Error in= ' + code
+                return label
 
+            elif ontology == 'opb':
+                url = auth.bioportal_url
+                headers = {'Authorization': 'apikey token=' + auth.bioportal_api_key}
+                include = '&ontologies=OPB'
+                include += "&display_context=false"
+                include += "&include=prefLabel"
+                include += "&require_exact_match=true"
+                include += "&display_links=false"
+
+                encoded_code = url_encode(code, 1)
+                urlnext = url + '/search?q=' + encoded_code + include
+                r = requests.get(urlnext, headers=headers)
+                try:
+                    label = r.json()["collection"][0]["prefLabel"]
+                except:
+                    label = 'Error in label:' + code
+                return label
+
+
+def resolve_identifiers(id=''):
+    if id.startswith('http://identifiers.org'):
+        ont_end = id.find('/', 23)
+        ont = id[23:ont_end]
+        code = id[ont_end+1:]
+
+        if ont == 'opb':
+            return ont, 'http://bhi.washington.edu/OPB#' + code
+        elif ont == 'fma':
+            newcode = code.replace(':', '_').upper()
+            return ont, 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'go':
+            newcode = code.replace(':', '_').upper()
+            return ont, 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'chebi':
+            newcode = code.replace(':', '_').upper()
+            return ont, 'http://purl.obolibrary.org/obo/' + newcode
+
+
+def url_encode(code, num):
+    if num == 1:
+        result = parse.quote_plus(code)
+    elif num == 2:
+        firstpass = parse.quote_plus(code)
+        result = parse.quote(firstpass)
+    return result
 
 if __name__ == "__main__":
     # t = get_term_by_code(lookupService='umls', ontology='SNOMEDCT_US', code='9468002')

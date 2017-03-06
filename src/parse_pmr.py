@@ -2,7 +2,6 @@ from io import BytesIO
 import requests
 from lxml import etree
 from rdflib.graph import Graph
-from urllib import parse
 import pprint
 import json
 import ontology_lookup
@@ -56,7 +55,7 @@ def add_labels(triples):
         items.append(str(o))
 
         try:
-            ont, code = resolve_identifiers(str(o))
+            ont, code = ontology_lookup.resolve_identifiers(str(o))
         except:
             label = 'TODO: other ontology label!!!'
             items.append(label)
@@ -78,8 +77,8 @@ def find_label (ont, code):
             return label
 
     newtriple = []
-    encoded_code = parse.quote_plus(code)
-    label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+    # label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
+    label = ontology_lookup.get_term_by_code(ontology=ont, code=code)
     newtriple.append(ont)
     newtriple.append(code)
     newtriple.append(label)
@@ -90,24 +89,7 @@ def find_label (ont, code):
 # http://identifiers.org/fma/FMA:84666      >>  http://purl.org/sig/ont/fma/fma84666        (Apical plasma membrane)
 # http://identifiers.org/go/GO:0070489      >>  http://purl.obolibrary.org/obo/GO_0070489   (T cell aggregation)
 # http://identifiers.org/chebi/CHEBI:26708  >>  http://purl.obolibrary.org/obo/CHEBI_26708  (sodium atom)
-
-def resolve_identifiers(id=''):
-    if id.startswith('http://identifiers.org'):
-        ont_end = id.find('/', 23)
-        ont = id[23:ont_end]
-        code = id[ont_end+1:]
-
-        if ont == 'opb':
-            return ont, 'http://bhi.washington.edu/OPB#' + code
-        elif ont == 'fma':
-            newcode = code.replace(':', '').lower()
-            return ont, 'http://purl.org/sig/ont/fma/' + newcode
-        elif ont == 'go':
-            newcode = code.replace(':', '_')
-            return ont, 'http://purl.obolibrary.org/obo/' + newcode
-        elif ont == 'chebi':
-            newcode = code.replace(':', '_')
-            return ont, 'http://purl.obolibrary.org/obo/' + newcode
+# http://identifiers.org/chebi/CHEBI:17996  >>  can't find in Bioportal, OK in OLS          (chloride)
 
 
 def get_annots(cellmlname):

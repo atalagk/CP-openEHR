@@ -17,6 +17,9 @@ password = login["thinkehr"][server]["password"]
 bioportal_url = login["bioportal"]["url"]
 bioportal_api_key = login["bioportal"]["API_KEY"]
 
+# EBI OLS
+ols_url = login["ols"]["url"]
+
 # UMLS
 umls_url = login["umls"]["url"]
 umls_tgt_url = login["umls"]["tgt_url"]
