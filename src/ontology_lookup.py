@@ -12,6 +12,10 @@ def get_term_by_code(**kwargs):
     version = kwargs.get('version', 'current')
     newurl = kwargs.get('url_extension', None)
 
+    if not str(code).startswith('http'):
+        id_code = resolve_identifiers(id=code, ont=ontology)
+        code = id_code
+
     if lookupService:
         # Generic lookup service with a specified particular ontology service
         if lookupService == 'bioportal':
@@ -117,12 +121,13 @@ def get_label_localowl(ont, code):
     label = 'Label not found in local ontology=' + ont + 'for code=' + code
     return label
 
-def resolve_identifiers(id=''):
+
+def resolve_identifiers(id='', ont=''):
+
     if id.startswith('http://identifiers.org'):
         ont_end = id.find('/', 23)
         ont = id[23:ont_end]
         code = id[ont_end+1:]
-
         if ont == 'opb':
             return ont, 'http://bhi.washington.edu/OPB#' + code
         elif ont == 'fma':
@@ -134,7 +139,34 @@ def resolve_identifiers(id=''):
         elif ont == 'chebi':
             newcode = code.replace(':', '_').upper()
             return ont, 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'snomed':
+            newcode = code.replace(':', '_').upper()
+            return ont, 'http://snomed.info/id/' + newcode
+        elif ont == 'loinc':
+            newcode = code.replace(':', '_').upper()
+            return ont, 'http://purl.bioontology.org/ontology/LNC/' + newcode
 
+    else:   # if just the code
+        code = id
+        ont_small = ont.lower()
+        ont = ont_small
+
+        if ont == 'opb':
+            newcode = 'OPB_' + code
+            return 'http://bhi.washington.edu/OPB#' + newcode
+        elif ont == 'fma':
+            newcode = 'FMA_' + code
+            return 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'go':
+            newcode = 'GO_' + code
+            return 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'chebi':
+            newcode = 'CHEBI_' + code
+            return 'http://purl.obolibrary.org/obo/' + newcode
+        elif ont == 'snomed':
+            return 'http://snomed.info/id/' + code
+        elif ont == 'loinc':
+            return 'http://purl.bioontology.org/ontology/LNC/' + code
 
 def url_encode(code, num):
     if num == 1:
@@ -150,8 +182,13 @@ if __name__ == "__main__":
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
     #t = get_term_by_code(lookupService='bioportal', ontology='FMA', code='http://purl.org/sig/ont/fma/fma84666')
-    #t = get_term_by_code(lookupService='ols', ontology='FMA', code='http://purl.obolibrary.org/obo/FMA_84666') works!
-    t = get_term_by_code(lookupService='ols', ontology='FMA', code='FMA_84666')
+    #t = get_term_by_code(lookupService='ols', ontology='FMA', code='http://purl.obolibrary.org/obo/FMA_84666') # works!
+    #t = get_term_by_code(lookupService='ols', ontology='FMA', code='84666')
+    #t = get_term_by_code(lookupService='ols', ontology='OPB', code='00340')
+    #t = get_term_by_code(lookupService='ols', ontology='CHEBI', code='17996')
+    #t = get_term_by_code(lookupService='ols', ontology='GO', code='0005254')
+    #t = get_term_by_code(lookupService='ols', ontology='SNOMED', code='9468002')
+    t = get_term_by_code(lookupService='ols', ontology='LOINC', code='26541-3')
 
     print(t)
 
