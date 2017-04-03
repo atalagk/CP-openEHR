@@ -78,7 +78,7 @@ def find_label (ont, code):
 
     newtriple = []
     # label = ontology_lookup.get_term_by_code(lookupService='bioportal', ontology=ont, code=encoded_code)
-    label = ontology_lookup.get_term_by_code(ontology=ont, code=code)
+    label = ontology_lookup.get_term_by_code(lookupService='ols', ontology=ont, code=code)
     newtriple.append(ont)
     newtriple.append(code)
     newtriple.append(label)

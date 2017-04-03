@@ -47,7 +47,7 @@ def get_term_by_code(**kwargs):
             r = requests.post(tgt, data=params, headers=h)
             st = r.text
 
-            url = 'https://uts-ws.nlm.nih.gov'
+            url = auth.umls_url
             query = {'ticket': st}
             content_endpoint = "/rest/content/" + str(version) + "/source/" + str(ontology) + "/" + str(code)
             r = requests.get(url + content_endpoint, params=query)
@@ -55,8 +55,19 @@ def get_term_by_code(**kwargs):
             items = json.loads(r.text)
             result = items["result"]["name"]
             return result
+        elif lookupService == 'ols':
+            header = {'Accept': 'application/json'}
+            encoded_code = url_encode(code, 2)
+            url = auth.ols_url + 'ontologies/' + ontology + '/terms/' + encoded_code
+            r = requests.get(url, headers=header)
+            items = r.json()
+            try:
+                label = items['label']
+            except KeyError:
+                label = 'Error in= ' + code
+            return label
     else:
-        # Hardcoded ontology lookup that makes use of EBI OLS for FMA, CHEBI, GO and Bioportal for FMA
+        # Without UoA OLS hardcoded ontology lookup that makes use of EBI OLS for FMA, CHEBI, GO and Bioportal for FMA
         if ontology == 'chebi' or ontology == 'go' or ontology == 'fma':
             #return get_label_localowl(ontology, code)
             header = {'Accept': 'application/json'}
@@ -134,11 +145,13 @@ def url_encode(code, num):
     return result
 
 if __name__ == "__main__":
-    # t = get_term_by_code(lookupService='umls', ontology='SNOMEDCT_US', code='9468002')
+    #t = get_term_by_code(lookupService='umls', ontology='SNOMEDCT_US', code='9468002')
     #t = get_term_by_code(lookupService='umls', ontology='FMA', code='17705')
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
     #t = get_term_by_code(lookupService='umls', ontology='GO', codes=['GO:0005254'])
-    t = get_term_by_code(lookupService='bioportal', ontology='FMA', code='http://purl.org/sig/ont/fma/fma84666')
+    #t = get_term_by_code(lookupService='bioportal', ontology='FMA', code='http://purl.org/sig/ont/fma/fma84666')
+    #t = get_term_by_code(lookupService='ols', ontology='FMA', code='http://purl.obolibrary.org/obo/FMA_84666') works!
+    t = get_term_by_code(lookupService='ols', ontology='FMA', code='FMA_84666')
 
     print(t)
 
