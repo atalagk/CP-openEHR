@@ -146,6 +146,14 @@ def resolve_identifiers(id='', ont=''):
             newcode = code.replace(':', '_').upper()
             return ont, 'http://purl.bioontology.org/ontology/LNC/' + newcode
 
+    elif id.startswith('http://purl.org/sig/ont'):
+        ont_end = id.find('/', 24)
+        ont = id[24:ont_end]
+        code = id[ont_end + 1:]
+        if ont == 'fma':
+            newcode = code[3:]
+            return ont, 'http://purl.obolibrary.org/obo/' + 'FMA_' + newcode
+
     else:   # if just the code
         code = id
         ont_small = ont.lower()

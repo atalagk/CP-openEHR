@@ -35,8 +35,9 @@ def get_triples(rdfs):
     js = []
     for s, p, o in rdfs:
         if s.startswith('http://identifiers.org') or \
-        p.startswith('http://identifiers.org') or \
-        o.startswith('http://identifiers.org') and not o.startswith('http://identifiers.org/doi'):
+                p.startswith('http://identifiers.org') or \
+                (o.startswith('http://identifiers.org') and not o.startswith('http://identifiers.org/doi')) or \
+                         (o.startswith('http://purl.org/sig/ont/')):
             tl.append(str(s))
             tl.append(str(p))
             tl.append(str(o))
@@ -104,11 +105,11 @@ if __name__ == "__main__":
     from time import time
 
     start_time = time()
-    #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
+    annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_1999-semgen.cellml')
     #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/chang_fujita_b_1999-semgen.cellml')
     #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/eskandari_2005-semgen.cellml')
     #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/mackenzie_1996-semgen.cellml')
-    annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/moss_2009-semgen.cellml')
+    #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/moss_2009-semgen.cellml')
     #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/thomas_2000-semgen.cellml')
     #annots = get_annots('https://models.physiomeproject.org/workspace/267/rawfile/240aec39cbe4a481af115b02aac83af1e87acf2e/semgen-annotation/weinstein_1995-semgen.cellml')
 
@@ -116,5 +117,5 @@ if __name__ == "__main__":
     pprint.pprint(annots)
     dt = str(time() - start_time)
     print('Finished in seconds: ' + dt)
-    #pprint.pprint(cache)   # to get unique terms
+    pprint.pprint(cache)   # to get unique terms
     #print(annots)
