@@ -5,7 +5,8 @@ with open('login.json') as login_details:
 
 # Use local instance of EHRScape Cloud or other
 
-server = login["server"]
+server = login["cdr-server"]
+ols = login["ols-server"]
 
 # Server for openEHR Clinical Data Repository (CDR)
 baseUrl = login["thinkehr"][server]["baseUrl"]
@@ -17,8 +18,8 @@ password = login["thinkehr"][server]["password"]
 bioportal_url = login["bioportal"]["url"]
 bioportal_api_key = login["bioportal"]["API_KEY"]
 
-# EBI OLS
-ols_url = login["ols"]["url"]
+# OLS
+ols_url = login["ols"][ols]["url"]
 
 # UMLS
 umls_url = login["umls"]["url"]
