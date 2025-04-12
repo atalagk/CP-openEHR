@@ -3,7 +3,7 @@ import sys
 import requests
 import pprint
 import json
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 
 def txt_content_dblClick(event):
     txt_content.clear()
@@ -126,4 +126,4 @@ if __name__ == '__main__':
     cmb_op.currentIndexChanged.connect(op_changed)
 
     cmb_op.setCurrentIndex(1)
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

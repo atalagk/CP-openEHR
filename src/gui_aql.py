@@ -2,7 +2,7 @@ import auth
 import sys
 import pprint
 import requests
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 #from PySide.QtGui import *
 #from PySide.QtCore import *
 
@@ -60,4 +60,4 @@ def getAQL(aql):
     response = requests.get(url, params={'aql': aql}, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
-sys.exit(app.exec_())
+sys.exit(app.exec())

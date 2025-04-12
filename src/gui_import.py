@@ -1,7 +1,7 @@
 import auth
 import sys
 import requests
-from PyQt5.QtWidgets import *
+from PyQt6.QtWidgets import *
 
 app = QApplication(sys.argv)
 win = QWidget()
@@ -67,4 +67,4 @@ def importCSV(data):
     response = requests.post(url, data, headers=header, params=para, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
-sys.exit(app.exec_())
+sys.exit(app.exec())
