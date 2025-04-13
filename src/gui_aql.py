@@ -29,7 +29,8 @@ def on_click():
         r = getAQL(aql_final)
         #quit()
     try:
-        for items in r['resultSet']:    # try to get nice formatted JSON view within Resultset
+        # for items in r['RESULTSET']:    # try to get nice formatted JSON view within Resultset
+        for items in r['rows']:    # try to get nice formatted JSON view within Resultset
             pprint.pprint(items)
     except ValueError:
         pprint.pprint(r)
@@ -55,9 +56,9 @@ win.setLayout(layout)
 win.show()
 
 def getAQL(aql):
-    url = auth.baseUrl + "/query/"
+    url = auth.baseUrl + "/query/aql"
     from requests.auth import HTTPBasicAuth
-    response = requests.get(url, params={'aql': aql}, auth=HTTPBasicAuth(auth.username, auth.password))
+    response = requests.get(url, params={'q': aql}, auth=HTTPBasicAuth(auth.username, auth.password))
     return response
 
 sys.exit(app.exec())
